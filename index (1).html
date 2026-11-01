@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Tanjas Culinary OS</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Tanjas Kochbuch">
+<meta name="theme-color" content="#ea580c">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%23ea580c'/><text x='50' y='68' font-size='56' text-anchor='middle'>🍲</text></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23ea580c'/><text x='50' y='68' font-size='56' text-anchor='middle'>🍲</text></svg>">
+<style>
+:root{--bg:#f6f3ee;--card:#fff;--ink:#1c1917;--muted:#6b6560;--accent:#ea580c;--accent-d:#c2410c;--green:#15803d;--green-bg:#e8f5ec;--line:#e7e2da;--red-bg:#fdecec;--red:#b91c1c;--r:20px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{font-size:17px}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.45;padding-bottom:calc(92px + env(safe-area-inset-bottom,0px));-webkit-font-smoothing:antialiased}
+button{font-family:inherit;font-size:inherit;cursor:pointer;border:0;background:none;color:inherit}
+input{font-family:inherit;font-size:1rem}
+h1,h2,h3,h4{margin:0;line-height:1.2}
+.wrap{max-width:1000px;margin:0 auto;padding:0 16px}
+header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30;padding-top:env(safe-area-inset-top,0px)}
+.hbar{display:flex;align-items:center;gap:12px;padding:12px 0 8px}
+.logo{width:46px;height:46px;border-radius:14px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
+.hbar h1{font-size:1.3rem;font-weight:800;letter-spacing:-.01em}
+.hbar p{margin:2px 0 0;font-size:.82rem;color:var(--muted)}
+.allergy{display:flex;gap:6px;overflow-x:auto;padding:0 0 10px;scrollbar-width:none}
+.allergy::-webkit-scrollbar{display:none}
+.tag{flex-shrink:0;font-size:.78rem;font-weight:600;padding:4px 10px;border-radius:99px;white-space:nowrap}
+.tag.no{background:var(--red-bg);color:var(--red)}
+.tag.ok{background:var(--green-bg);color:var(--green)}
+main{padding-top:16px}
+section{display:none}
+section.active{display:block}
+.panel{background:var(--card);border-radius:var(--r);padding:14px;border:1px solid var(--line);margin-bottom:14px}
+.search{position:relative}
+.search input{width:100%;padding:14px 14px 14px 46px;border-radius:14px;border:2px solid var(--line);background:#fff;color:var(--ink);outline:none}
+.search input:focus{border-color:var(--accent)}
+.search span{position:absolute;left:15px;top:50%;transform:translateY(-50%);font-size:1.15rem}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:10px 0 2px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;padding:9px 15px;border-radius:99px;background:#f1ede6;font-weight:600;font-size:.92rem;color:#44403c;white-space:nowrap}
+.chip.on{background:var(--accent);color:#fff}
+.chip.tog.on{background:var(--green);color:#fff}
+.rowtop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:2px 2px 12px}
+.count{font-weight:700;color:var(--muted);font-size:.95rem}
+.rand{background:#1c1917;color:#fff;padding:10px 16px;border-radius:99px;font-weight:700;font-size:.92rem}
+.grid{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:620px){.grid{grid-template-columns:1fr 1fr}}
+@media(min-width:900px){.grid{grid-template-columns:1fr 1fr 1fr}}
+.card{background:var(--card);border-radius:var(--r);overflow:hidden;border:1px solid var(--line);cursor:pointer;box-shadow:0 2px 10px rgba(60,40,20,.06);transition:transform .15s}
+.card:active{transform:scale(.985)}
+.ph{position:relative;aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.ph .emo{font-size:64px}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.c-Frühstück{background:linear-gradient(135deg,#fde68a,#fdba74)}
+.c-Büro-Lunch{background:linear-gradient(135deg,#bbf7d0,#86efac)}
+.c-Abendessen{background:linear-gradient(135deg,#fecaca,#fda4af)}
+.c-Süßes{background:linear-gradient(135deg,#fbcfe8,#f9a8d4)}
+.c-Snacks{background:linear-gradient(135deg,#bae6fd,#a5b4fc)}
+.ph .time{position:absolute;left:10px;bottom:10px;background:rgba(255,255,255,.95);color:var(--ink);font-weight:700;font-size:.85rem;padding:5px 11px;border-radius:99px}
+.fav{position:absolute;right:10px;top:10px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.95);font-size:1.4rem;color:#9ca3af;display:flex;align-items:center;justify-content:center;line-height:1}
+.fav.on{color:#e11d48}
+.cb{padding:14px 16px 16px}
+.meta{font-size:.82rem;color:var(--accent-d);font-weight:700;text-transform:uppercase;letter-spacing:.03em;margin-bottom:5px}
+.cb h3{font-size:1.15rem;font-weight:800;margin-bottom:10px}
+.stats{display:flex;gap:14px;align-items:center;font-size:.9rem;color:var(--muted);flex-wrap:wrap}
+.stats b{color:var(--green)}
+.empty{text-align:center;padding:40px 16px;color:var(--muted);grid-column:1/-1}
+.hero{background:#fff;border:1px solid var(--line);border-left:6px solid var(--accent);border-radius:var(--r);padding:16px;margin-bottom:14px}
+.hero small{display:block;font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--accent-d);margin-bottom:4px}
+.hero h2{font-size:1.4rem;font-weight:800}
+.hero p{margin:6px 0 0;color:var(--muted);font-size:.95rem}
+.two{display:grid;gap:16px}
+@media(min-width:900px){.two{grid-template-columns:7fr 5fr}}
+.step h3{font-size:.95rem;font-weight:800;margin-bottom:10px;color:var(--accent-d)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(min-width:620px){.opts{grid-template-columns:1fr 1fr 1fr}}
+.opts.one{grid-template-columns:1fr}
+@media(min-width:620px){.opts.one{grid-template-columns:1fr 1fr}}
+.opt{text-align:left;padding:11px 12px;border-radius:14px;border:2px solid var(--line);background:#fff}
+.opt b{display:block;font-size:.92rem}
+.opt span{display:block;font-size:.78rem;color:var(--muted);margin-top:2px}
+.opt.on{border-color:var(--accent);background:#fff4ec}
+.result{position:sticky;top:130px;border:2px solid var(--accent)}
+.macros{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.mac{background:#f6f3ee;border-radius:14px;padding:10px 6px;text-align:center}
+.mac small{display:block;font-size:.75rem;color:var(--muted)}
+.mac b{font-size:1.1rem}
+.mac.g b{color:var(--green)}.mac.o b{color:var(--accent-d)}
+ul.plain{list-style:none;margin:0;padding:0}
+ul.plain li{padding:7px 0;border-bottom:1px solid var(--line);font-size:.95rem}
+ol.steps{padding-left:20px;margin:8px 0 0;font-size:.95rem}
+ol.steps li{margin-bottom:8px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:15px;border-radius:14px;background:var(--accent);color:#fff;font-weight:800;margin-top:12px}
+.btn.sec{background:#1c1917}
+.btn.light{background:#f1ede6;color:var(--ink)}
+.swap{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.swap .u{display:inline-block;font-size:.78rem;font-weight:700;background:#f1ede6;border-radius:99px;padding:4px 10px;margin-bottom:8px}
+.swap .no{color:var(--red);text-decoration:line-through;font-weight:600;font-size:.9rem}
+.swap .yes{color:var(--green);font-weight:800;font-size:1.05rem;margin:4px 0 8px}
+.swap p{margin:0;font-size:.92rem;color:#44403c}
+.rules{display:grid;gap:10px;margin-top:12px}
+@media(min-width:760px){.rules{grid-template-columns:1fr 1fr 1fr}}
+.rule{background:#f6f3ee;border-radius:14px;padding:13px;font-size:.92rem}
+.rule b{display:block;margin-bottom:4px;color:var(--accent-d)}
+form.add{display:flex;gap:8px}
+form.add input{flex:1;min-width:0;padding:13px;border-radius:14px;border:2px solid var(--line);outline:none}
+form.add input:focus{border-color:var(--accent)}
+form.add button{padding:0 18px;border-radius:14px;background:var(--accent);color:#fff;font-weight:800}
+.si{display:flex;align-items:center;gap:12px;padding:13px 4px;border-bottom:1px solid var(--line)}
+.si input{width:24px;height:24px;accent-color:var(--green);flex-shrink:0}
+.si span{flex:1;font-size:1rem}
+.si.done span{text-decoration:line-through;color:#a8a29e}
+.si button{color:#a8a29e;font-size:1.3rem;padding:4px 8px}
+nav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);z-index:40;padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px))}
+nav div{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+nav button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 0;border-radius:14px;color:#78716c;font-weight:700;font-size:.78rem;position:relative}
+nav button i{font-style:normal;font-size:1.45rem;line-height:1.1}
+nav button.on{color:var(--accent-d);background:#fff1e6}
+#badge{position:absolute;top:2px;right:18%;background:var(--green);color:#fff;font-size:.7rem;border-radius:99px;padding:1px 6px;font-weight:800}
+.modal{position:fixed;inset:0;background:rgba(20,15,10,.6);z-index:60;overflow-y:auto;display:none}
+.modal.show{display:block}
+.sheet{background:#fff;max-width:660px;margin:0 auto;min-height:100%;position:relative}
+@media(min-width:700px){.sheet{margin:20px auto;min-height:0;border-radius:24px;overflow:hidden}}
+.sheet .ph{aspect-ratio:16/10}
+.close{position:absolute;left:12px;top:calc(12px + env(safe-area-inset-top,0px));width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.96);font-size:1.4rem;font-weight:700;z-index:3;display:flex;align-items:center;justify-content:center}
+.sheet .fav{top:calc(12px + env(safe-area-inset-top,0px));z-index:3;width:44px;height:44px}
+.sb{padding:18px 16px 30px}
+.sb h2{font-size:1.5rem;font-weight:800;margin:4px 0 8px}
+.sb .desc{color:#44403c;font-size:.98rem;margin:0 0 12px}
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.devs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+.devs span{font-size:.82rem;font-weight:700;background:#fff1e6;color:var(--accent-d);padding:4px 10px;border-radius:99px}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:#f6f3ee;border-radius:16px;padding:12px;margin:16px 0}
+.qty{display:flex;align-items:center;gap:10px}
+.qty button{width:40px;height:40px;border-radius:12px;background:#fff;border:1px solid var(--line);font-size:1.3rem;font-weight:800}
+.qty b{min-width:26px;text-align:center;font-size:1.2rem}
+.timer{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.timer button{padding:8px 12px;border-radius:10px;background:#fff;border:1px solid var(--line);font-weight:700;font-size:.9rem}
+.timer .stop{color:var(--red)}
+#tdisp{font-family:ui-monospace,Menlo,monospace;font-weight:800;font-size:1.05rem;background:#1c1917;color:#4ade80;padding:7px 11px;border-radius:10px}
+.sh{display:flex;align-items:center;justify-content:space-between;margin:22px 0 10px}
+.sh h4{font-size:1.1rem;font-weight:800}
+.sh button{color:var(--green);font-weight:800;font-size:.92rem}
+.ing{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);font-size:1rem}
+.stp{display:flex;gap:12px;align-items:flex-start;padding:13px;border-radius:14px;background:#f6f3ee;margin-bottom:10px;cursor:pointer}
+.stp input{width:24px;height:24px;margin-top:1px;accent-color:var(--green);flex-shrink:0}
+.stp.done{opacity:.5}
+.stp div{font-size:1rem}
+.stp b{color:var(--accent-d)}
+.tip{background:#fff7e6;border:1px solid #fcd9a0;border-radius:14px;padding:13px;font-size:.95rem;margin-top:18px}
+.tip b{display:block;color:var(--accent-d);margin-bottom:3px}
+#toast{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:#14532d;color:#fff;padding:12px 20px;border-radius:99px;font-weight:700;z-index:100;display:none;max-width:90%;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+</style>
+</head>
+<body>
+
+<div id="toast"></div>
+
+<header>
+  <div class="wrap">
+    <div class="hbar">
+      <div class="logo">🍲</div>
+      <div>
+        <h1>Tanjas Culinary OS</h1>
+        <p>Milchfrei · Nussfrei · Ohne Sonnenblumen · High Protein</p>
+      </div>
+    </div>
+    <div class="allergy">
+      <span class="tag no">🚫 Keine Milch / Laktose / Whey</span>
+      <span class="tag no">🚫 Keine Nüsse / Mandeln</span>
+      <span class="tag no">🚫 Keine Sonnenblumenkerne / -öl</span>
+      <span class="tag ok">🥚 Eier, Hafer, Kokos &amp; Kürbiskerne erlaubt</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section id="tab-recipes" class="active">
+  <div class="panel">
+    <div class="search"><span>🔍</span><input id="q" type="search" placeholder="Rezept oder Zutat suchen (Lachs, Ei, Hafer ...)" oninput="renderRecipes()"></div>
+    <div class="chips" id="catChips"></div>
+    <div class="chips" id="devChips"></div>
+    <div class="chips" id="togChips"></div>
+  </div>
+  <div class="rowtop"><span class="count" id="count"></span><button class="rand" onclick="randomRecipe()">🎲 Überrasch mich</button></div>
+  <div class="grid" id="grid"></div>
+</section>
+
+<section id="tab-builder">
+  <div class="hero"><small>Bowl- &amp; Pfannen-Generator</small><h2>600+ Safe-Kombinationen</h2><p>Wähle deine Lieblingszutaten – 100% frei von Milch, Nüssen und Sonnenblumenöl.</p>
+    <button class="btn sec" onclick="randomizeBuilder()">🎲 Zufalls-Kombi würfeln</button></div>
+  <div class="two">
+    <div>
+      <div class="panel step"><h3>1. Sättigungs-Basis</h3><div class="opts" id="b-base"></div></div>
+      <div class="panel step"><h3>2. High-Protein Quelle</h3><div class="opts" id="b-protein"></div></div>
+      <div class="panel step"><h3>3. Zwei Gemüsesorten (2 wählen)</h3><div class="opts" id="b-veg"></div></div>
+      <div class="panel step"><h3>4. Cremige Safe-Sauce</h3><div class="opts one" id="b-sauce"></div></div>
+      <div class="panel step"><h3>5. Nussfreies Crunch-Topping</h3><div class="opts" id="b-top"></div></div>
+    </div>
+    <div>
+      <div class="panel result">
+        <small style="font-weight:800;color:var(--green);text-transform:uppercase;font-size:.75rem;letter-spacing:.05em">Deine Kreation (1 Portion)</small>
+        <h3 id="bTitle" style="font-size:1.25rem;margin-top:4px">Power-Bowl</h3>
+        <div class="macros">
+          <div class="mac g"><small>Protein</small><b id="bProt">0 g</b></div>
+          <div class="mac o"><small>Kalorien</small><b id="bKcal">0</b></div>
+          <div class="mac"><small>Dauer</small><b>20 Min</b></div>
+        </div>
+        <h4 style="font-size:.85rem;color:var(--muted);text-transform:uppercase;margin-bottom:4px">Zutaten</h4>
+        <ul class="plain" id="bIng"></ul>
+        <h4 style="font-size:.85rem;color:var(--muted);text-transform:uppercase;margin:14px 0 0">Zubereitung</h4>
+        <ol class="steps" id="bSteps"></ol>
+        <button class="btn" onclick="addBuilderToShopping()">🛒 Alles auf die Einkaufsliste</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="tab-swaps">
+  <div class="hero"><small>Spickzettel für Küche &amp; Backofen</small><h2>Smart-Swaps: Sicher tauschen</h2><p>So ersetzt du Milchprodukte, Nüsse und Sonnenblumenöl 1:1 – mit Ei und Hafer gelingt alles.</p></div>
+  <div class="grid" id="swaps"></div>
+  <div class="panel" style="margin-top:16px">
+    <h3 style="font-size:1.2rem">🧁 Tanjas 3 goldene Back-Regeln</h3>
+    <div class="rules">
+      <div class="rule"><b>1. Eier als Booster</b>Eier sind erlaubt – du brauchst keinen Ei-Ersatz! Aufgeschlagene Eier machen Kuchen auch ohne Butter und Topfen locker.</div>
+      <div class="rule"><b>2. Hafermehl statt Mandeln</b>Zarte Haferflocken im Mixer fein mahlen. Bindet saftig und ist 100% nussfrei.</div>
+      <div class="rule"><b>3. Mildes Rapsöl oder Kokosöl</b>Auf das Kleingedruckte achten: Manche Haferdrinks und Brote enthalten Sonnenblumenöl oder -kerne.</div>
+    </div>
+  </div>
+</section>
+
+<section id="tab-shopping">
+  <div class="hero"><small>Immer griffbereit im Supermarkt</small><h2>Tanjas Safe-Einkaufsliste</h2><p>Wird automatisch auf deinem Handy gespeichert.</p></div>
+  <form class="add panel" onsubmit="addCustom(event)">
+    <input id="newItem" placeholder="Eigene Zutat hinzufügen ...">
+    <button type="submit">+ Neu</button>
+  </form>
+  <div class="chips" style="padding-top:0">
+    <button class="chip" onclick="quickAdd('10 Bio-Eier')">+ 10 Bio-Eier</button>
+    <button class="chip" onclick="quickAdd('Hafermilch (ohne Sonnenblumenöl)')">+ Safe Hafermilch</button>
+    <button class="chip" onclick="quickAdd('Kokosjoghurt Natur')">+ Kokosjoghurt</button>
+    <button class="chip" onclick="quickAdd('Kürbiskerne (steirisch)')">+ Kürbiskerne</button>
+    <button class="chip" onclick="quickAdd('Olivenöl & Rapsöl')">+ Oliven-/Rapsöl</button>
+  </div>
+  <div class="panel" id="shopList" style="margin-top:12px"></div>
+  <button class="btn" onclick="copyList()">📋 Für WhatsApp kopieren</button>
+  <button class="btn light" onclick="clearDone()">Erledigte löschen</button>
+</section>
+
+</main>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closeRecipe()">
+  <div class="sheet">
+    <button class="close" onclick="closeRecipe()">✕</button>
+    <div class="ph" id="mPh"></div>
+    <div class="sb">
+      <div class="devs" id="mDevs"></div>
+      <h2 id="mTitle"></h2>
+      <p class="desc" id="mDesc"></p>
+      <div class="badges">
+        <span class="tag ok">✓ Milchfrei</span><span class="tag ok">✓ Nussfrei</span><span class="tag ok">✓ Ohne Sonnenblumenkerne</span>
+      </div>
+      <div class="macros">
+        <div class="mac g"><small>Protein / Portion</small><b id="mProt"></b></div>
+        <div class="mac o"><small>Kalorien / Portion</small><b id="mKcal"></b></div>
+        <div class="mac"><small>Zeit</small><b id="mTime"></b></div>
+      </div>
+      <div class="bar">
+        <div class="qty"><span style="font-weight:700">Portionen</span><button onclick="chgPortions(-1)">−</button><b id="mPort"></b><button onclick="chgPortions(1)">+</button></div>
+        <div class="timer"><span id="tdisp">00:00</span><button onclick="startTimer(5)">5m</button><button onclick="startTimer(10)">10m</button><button onclick="startTimer(15)">15m</button><button class="stop" onclick="stopTimer()">Stop</button></div>
+      </div>
+      <div class="sh"><h4>Zutaten</h4><button onclick="modalToShopping()">+ Einkaufsliste</button></div>
+      <div id="mIng"></div>
+      <div class="sh"><h4>Zubereitung</h4><span style="font-size:.8rem;color:var(--muted)">Tippen = erledigt</span></div>
+      <div id="mSteps"></div>
+      <div class="tip"><b>💡 Tanjas Küchen-Tipp</b><span id="mTip"></span></div>
+    </div>
+  </div>
+</div>
+
+<nav><div>
+  <button id="n-recipes" class="on" onclick="tab('recipes')"><i>📖</i>Rezepte</button>
+  <button id="n-builder" onclick="tab('builder')"><i>🥣</i>Baukasten</button>
+  <button id="n-swaps" onclick="tab('swaps')"><i>🔄</i>Smart-Swaps</button>
+  <button id="n-shopping" onclick="tab('shopping')"><i>🛒</i>Einkauf<span id="badge">0</span></button>
+</div></nav>
+
+<script>
+/* ---------- REZEPTE ---------- */
+const RECIPES=[];let _n=0;
+function R(title,cat,emoji,dev,min,prot,kcal,port,kw,ings,steps,tip,desc){
+  RECIPES.push({id:'r'+(++_n),title,cat,emoji,dev:dev.split('/'),time:min,protein:prot,kcal,basePortions:port,kw,ingredients:ings,steps,tip,desc:desc||''});
+}
+
+/* --- Frühstück (Original) --- */
+R('Fluffiges Kräuter-Rührei mit Räucherlachs & Kürbiskern-Crunch','Frühstück','🍳','Pfanne',10,36,440,1,'scrambledeggs',
+ ['3 Stk Bio-Eier (Größe M/L)','80 g Räucherlachs','2 EL Hafermilch','15 g Steirische Kürbiskerne (geröstet)','1 TL Olivenöl zum Braten','1 Bund Schnittlauch & Dill'],
+ ['Die Eier mit der Hafermilch, einer Prise Salz und Pfeffer kräftig verquirlen.','Kürbiskerne in einer Pfanne ohne Fett 2 Minuten anrösten und herausnehmen.','Olivenöl in die Pfanne geben und die Eimasse bei mittlerer Hitze sanft zusammenschieben, bis sie cremig gestockt ist.','Mit Räucherlachs, Schnittlauch und Kürbiskernen anrichten.'],
+ 'In mildem Olivenöl bei mittlerer Hitze langsam stocken lassen – so bleibt das Ei extra saftig.',
+ 'Durch einen Schuss Hafermilch und kräftiges Aufschlagen wird dieses Rührei ganz ohne Sahne oder Butter himmlisch cremig.');
+R('Goldene Apfel-Zimt Protein-Pancakes (mit Ei & Hafer)','Frühstück','🥞','Pfanne',15,24,460,1,'pancakes',
+ ['2 Stk Bio-Eier','60 g Zarte Haferflocken','60 g Kokosjoghurt oder Sojajoghurt (natur)','0.5 Stk Apfel (fein gerieben)','1 TL Backpulver & 1 TL Ceylon-Zimt','1 TL Kokosöl zum Ausbacken','1 EL Ahornsirup (optional)'],
+ ['Eier, Joghurt, Haferflocken, Backpulver und Zimt glatt rühren (oder kurz pürieren).','Den halben Apfel fein reiben und unterheben. 3 Minuten quellen lassen.','Kokosöl erhitzen und pro Pancake 2 EL Teig bei mittlerer Hitze von beiden Seiten goldbraun backen.','Warm servieren, nach Wunsch mit Ahornsirup und Beeren.'],
+ 'Wenn du die Haferflocken kurz im Mixer zu Mehl mahlst, werden die Pancakes wie im amerikanischen Diner!',
+ 'Goldbraune, saftige Pfannkuchen aus zarten Haferflocken, Eiern und Kokosjoghurt – komplett ohne Milch, Whey oder Nüsse.');
+R('Deftige Süßkartoffel-Schakschuka mit pochierten Eiern','Frühstück','🥘','Pfanne',25,23,430,2,'shakshuka',
+ ['4 Stk Bio-Eier','250 g Süßkartoffel (1 cm Würfel)','1 Dose Stückige Tomaten (400 g)','1 Stk Rote Paprika (gewürfelt)','1 EL Olivenöl','2 EL Kürbiskerne & frische Petersilie'],
+ ['Olivenöl in einer großen Pfanne mit Deckel erhitzen. Süßkartoffel und Paprika 6–8 Minuten anbraten.','Mit Salz, Pfeffer, edelsüßem Paprikapulver und einer Prise Kreuzkümmel würzen.','Stückige Tomaten angießen und 5 Minuten köcheln, bis die Süßkartoffeln weich sind.','Vier Mulden in die Sauce drücken, Eier hineinschlagen und zugedeckt 6 Minuten stocken lassen.'],
+ 'Statt Feta gibst du am Ende einen Klecks kühlen Kokosjoghurt und gerösteten Sesam darüber.',
+ 'Würzige Tomaten-Paprika-Pfanne mit kleinen Süßkartoffel-Würfeln, in der frische Eier sanft garen.');
+R('High-Protein Berry-Chia Overnight Oats (Nussfrei)','Frühstück','🍓','Kalt',5,21,410,1,'overnightoats',
+ ['60 g Zarte Haferflocken','150 ml Sojamilch oder Hafermilch','100 g Sojajoghurt oder Kokosjoghurt','15 g Chiasamen oder Leinsamen (geschrotet)','80 g Heidelbeeren & Himbeeren','15 g Kürbiskerne (als Topping)'],
+ ['Haferflocken, Chiasamen, Pflanzenmilch und Joghurt im Schraubglas gründlich verrühren.','Die Hälfte der Beeren direkt unterheben.','Abgedeckt mindestens 4 Stunden (oder über Nacht) im Kühlschrank ziehen lassen.','Morgens mit den restlichen Beeren und Kürbiskernen toppen.'],
+ 'Kürbiskerne erst morgens frisch darüberstreuen, damit sie ihren vollen Biss behalten.',
+ 'Das perfekte Vorbereitungs-Frühstück für stressige Morgen: cremig durch Soja-/Kokosjoghurt und Chiasamen.');
+
+/* --- Frühstück (neu) --- */
+R('Spinat-Tomaten-Omelett','Frühstück','🍳','Pfanne',10,26,330,1,'omelette',
+ ['3 Stk Bio-Eier','1 Handvoll Babyspinat','1 Stk Tomate','1 TL Olivenöl'],
+ ['Eier mit Salz, Pfeffer und 1 EL Wasser verquirlen.','Öl in der Pfanne erhitzen, Spinat und Tomatenwürfel 1 Minute anbraten.','Eier darübergießen, bei mittlerer Hitze stocken lassen und zusammenklappen.'],
+ 'Das Wasser im Ei macht das Omelett luftiger.');
+R('Hafer-Crêpes mit Beeren','Frühstück','🥞','Pfanne',15,20,380,1,'crepes',
+ ['2 Stk Bio-Eier','40 g Zarte Haferflocken','100 ml Hafermilch','1 TL Kokosöl','100 g Beeren'],
+ ['Eier, Haferflocken und Hafermilch fein pürieren, 5 Minuten quellen lassen.','Kokosöl erhitzen, dünn Teig verteilen und 2 Minuten pro Seite backen.','Mit Beeren füllen und einrollen.'],
+ 'Der Teig lässt sich am Vorabend anrühren.');
+R('Kokos-Apfel-Porridge','Frühstück','🥣','Topf',8,12,360,1,'porridge',
+ ['50 g Zarte Haferflocken','200 ml Hafermilch','1 Stk Apfel (gerieben)','1 TL Zimt','1 EL Kokosraspeln','15 g Kürbiskerne'],
+ ['Haferflocken, Hafermilch und Apfel im Topf aufkochen.','5 Minuten unter Rühren köcheln, bis es cremig ist.','Mit Zimt, Kokosraspeln und Kürbiskernen toppen.'],
+ 'Eine Prise Salz holt die Süße heraus.');
+R('Süßkartoffel mit Spiegelei aus dem Airfryer','Frühstück','🍠','Airfryer',25,14,340,1,'sweetpotato',
+ ['1 Stk Süßkartoffel (ca. 250 g)','2 Stk Bio-Eier','1 TL Olivenöl','1 Handvoll Rucola'],
+ ['Süßkartoffel mit Öl einreiben und 20 Minuten bei 190 °C im Airfryer garen.','Spiegeleier in der Pfanne braten.','Süßkartoffel aufschneiden, mit Rucola und Eiern anrichten.'],
+ 'Fertig ist sie, wenn ein Messer leicht einsticht.');
+R('Knusprige Frühstückskartoffeln mit Spiegelei','Frühstück','🥔','Airfryer',20,9,320,2,'potatoes',
+ ['400 g Kartoffeln (in Würfeln)','1 EL Olivenöl','1 TL Paprikapulver','2 Stk Bio-Eier'],
+ ['Kartoffelwürfel mit Öl, Paprika und Salz mischen.','15 Minuten bei 200 °C im Airfryer garen, einmal schütteln.','Mit Spiegeleiern servieren.'],
+ 'Würfel vorher kurz abspülen – so werden sie knuspriger.');
+R('Avocado-Rührei auf Reiswaffeln','Frühstück','🥑','Pfanne',10,20,400,1,'avocado',
+ ['3 Stk Reiswaffeln','2 Stk Bio-Eier','0.5 Stk Reife Avocado','1 TL Olivenöl','1 Spritzer Zitronensaft'],
+ ['Eier in Olivenöl cremig rühren.','Avocado mit Zitronensaft, Salz und Pfeffer zerdrücken.','Reiswaffeln mit Avocado bestreichen und das Rührei darauf verteilen.'],
+ 'Chiliflocken geben einen schönen Kick.');
+R('Mango-Chia-Pudding','Frühstück','🥭','Kalt',5,9,310,1,'chiapudding',
+ ['3 EL Chiasamen','150 ml Kokosmilch','0.5 Stk Mango (gewürfelt)','1 TL Ahornsirup'],
+ ['Chiasamen, Kokosmilch und Ahornsirup verrühren.','Mindestens 2 Stunden (oder über Nacht) kühl stellen.','Mit Mangowürfeln toppen.'],
+ 'Nach 10 Minuten nochmal umrühren, dann klumpt nichts.');
+R('Bananen-Ei-Pfannkuchen (3 Zutaten)','Frühstück','🍌','Pfanne',10,18,330,1,'bananapancakes',
+ ['1 Stk Reife Banane','2 Stk Bio-Eier','40 g Zarte Haferflocken','1 TL Kokosöl'],
+ ['Banane zerdrücken und mit Eiern und Haferflocken verrühren.','Kokosöl erhitzen, kleine Pancakes bei mittlerer Hitze beidseitig goldbraun backen.','Mit Zimt oder Beeren servieren.'],
+ 'Je reifer die Banane, desto süßer – Zucker ist nicht nötig.');
+R('Avocado-Eiersalat ohne Mayo','Frühstück','🥚','Topf/Kalt',12,19,380,1,'eggsalad',
+ ['3 Stk Bio-Eier','0.5 Stk Reife Avocado','1 TL Senf','1 Spritzer Zitronensaft','1 EL Schnittlauch'],
+ ['Eier 10 Minuten hart kochen, abschrecken und schälen.','Eier mit Avocado, Senf und Zitronensaft zerdrücken.','Mit Schnittlauch, Salz und Pfeffer abschmecken.'],
+ 'Schmeckt auch als Füllung für Gurkenboote.');
+R('Beeren-Baked-Oats','Frühstück','🫐','Ofen/Airfryer',20,17,370,1,'oatmeal',
+ ['50 g Zarte Haferflocken','1 Stk Bio-Ei','1 Stk Reife Banane','100 ml Hafermilch','80 g Beeren','1 TL Backpulver'],
+ ['Alles außer den Beeren verrühren, dann die Beeren unterheben.','In eine ofenfeste Tasse oder Form füllen.','20 Minuten bei 180 °C backen (Airfryer: 15 Minuten bei 170 °C).'],
+ 'Warm essen – dann ist es innen schön weich.');
+R('Würzige Bohnen-Eier-Pfanne','Frühstück','🍳','Pfanne',15,27,420,1,'beans',
+ ['120 g Weiße Bohnen (Dose, abgetropft)','2 Stk Bio-Eier','1 Stk Tomate','1 TL Olivenöl','0.5 TL Paprikapulver'],
+ ['Öl erhitzen, Tomatenwürfel und Bohnen mit Paprika 4 Minuten braten.','Zwei Mulden formen und die Eier hineinschlagen.','Zugedeckt 4 Minuten stocken lassen.'],
+ 'Frische Petersilie darüber – fertig.');
+R('Zucchini-Puffer mit Ei','Frühstück','🥒','Pfanne',20,17,300,2,'zucchini',
+ ['1 Stk Zucchini (ca. 300 g, geraspelt)','2 Stk Bio-Eier','4 EL Hafermehl (fein gemahlene Haferflocken)','1 EL Rapsöl'],
+ ['Zucchini raspeln und gut ausdrücken.','Mit Eiern, Hafermehl, Salz und Pfeffer vermischen.','In Rapsöl kleine Puffer 3 Minuten pro Seite goldbraun braten.'],
+ 'Mit Kokosjoghurt, Zitrone und Dill servieren.');
+R('Mini-Frittata-Muffins aus dem Airfryer','Frühstück','🧁','Airfryer',15,20,250,2,'frittata',
+ ['4 Stk Bio-Eier','1 Stk Paprika (fein gewürfelt)','1 Handvoll Spinat','1 EL Olivenöl'],
+ ['Eier verquirlen, Paprika und Spinat unterrühren und würzen.','In Silikonförmchen füllen.','10 Minuten bei 180 °C im Airfryer backen.'],
+ 'Halten 3 Tage im Kühlschrank – ideal fürs Büro.');
+R('Kokosjoghurt-Bowl mit Beeren','Frühstück','🍨','Kalt',5,22,340,1,'yogurtbowl',
+ ['200 g Kokosjoghurt oder Sojajoghurt (natur)','80 g Beeren','2 EL Zarte Haferflocken','15 g Kürbiskerne','1 TL Ahornsirup'],
+ ['Joghurt in eine Schüssel geben.','Beeren und Haferflocken darauf verteilen.','Mit Kürbiskernen und Sirup toppen.'],
+ 'Sojajoghurt hat mehr Protein als Kokosjoghurt.');
+R('Tomaten-Basilikum-Rührei','Frühstück','🍅','Pfanne',8,20,310,1,'eggs',
+ ['3 Stk Bio-Eier','5 Stk Kirschtomaten','1 TL Olivenöl','1 Handvoll Basilikum'],
+ ['Tomaten halbieren und in Olivenöl 2 Minuten anbraten.','Verquirlte Eier dazugeben und sanft stocken lassen.','Mit Basilikum, Salz und Pfeffer servieren.'],
+ 'Nicht zu heiß braten – so bleibt das Rührei cremig.');
+R('Lachs-Gurken-Röllchen','Frühstück','🍣','Kalt',5,22,220,1,'smokedsalmon',
+ ['100 g Räucherlachs','0.5 Stk Salatgurke','0.5 Stk Reife Avocado','1 Spritzer Zitronensaft'],
+ ['Gurke mit dem Sparschäler in lange Streifen schneiden.','Avocado mit Zitrone zerdrücken und auf den Lachs streichen.','Aufrollen und mit Pfeffer servieren.'],
+ 'Super als Fingerfood oder Büro-Snack.');
+
+/* --- Büro-Lunch (Original) --- */
+R('Mediterrane Hühner-Quinoa-Bowl mit Avocado-Kräuter-Creme','Büro-Lunch','🥗','Pfanne',25,45,560,2,'quinoabowl',
+ ['300 g Hühnerbrustfilet','140 g Quinoa (ungekocht)','1 Stk Reife Avocado','150 g Kirschtomaten & Salatgurke','2 EL Olivenöl & Saft einer halben Zitrone','20 g Geröstete Kürbiskerne'],
+ ['Quinoa heiß abspülen und in der doppelten Menge Salzwasser 15 Minuten garen.','Hühnerbrust in Streifen schneiden, mit Paprika, Oregano, Salz und Olivenöl 7 Minuten goldbraun braten.','Für die Creme: halbe Avocado mit Zitronensaft, 1 EL Olivenöl, 2 EL Wasser, Salz und Kräutern pürieren.','Quinoa, Huhn, Gemüse und Creme in einer Bowl anrichten, mit Kürbiskernen bestreuen.'],
+ 'Für Meal-Prep das Dressing in einem kleinen Extra-Gläschen mitnehmen.',
+ 'Schmeckt kalt im Büro genauso genial wie warm! Die Avocado-Zitronen-Creme ersetzt jedes Joghurt- oder Sahne-Dressing.');
+R('Knuspriger Kichererbsen-Thunfisch-Salat mit gekochtem Ei','Büro-Lunch','🐟','Kalt',12,42,490,1,'tunasalad',
+ ['1 Dose Thunfisch im eigenen Saft (ca. 140 g)','120 g Kichererbsen (Glas, abgespült)','2 Stk Hartgekochte Bio-Eier','100 g Paprika & Gurke','1.5 EL Olivenöl & 1 TL milder Senf','1 EL Apfelessig & Petersilie'],
+ ['Kichererbsen abspülen und gut abtropfen lassen.','Thunfisch zerpflücken und mit Kichererbsen, Paprika und Gurke mischen.','Aus Olivenöl, Essig, Senf, Salz, Pfeffer und Petersilie eine Vinaigrette rühren und unterheben.','Die Eier vierteln und auf dem Salat anrichten.'],
+ 'Rote Zwiebeln kurz in Zitronensaft einlegen – das macht sie mild.',
+ 'Kein Kochen am Herd nötig: blitzschneller Protein-Booster für lange Arbeitstage.');
+R('Asiatische Glasnudel-Puten-Box mit Sesam-Ingwer-Glaze','Büro-Lunch','🥢','Pfanne',20,41,510,2,'noodles',
+ ['300 g Putenbrust-Streifen','120 g Glasnudeln oder Reisnudeln','120 g Edamame (geschält, TK)','2 Stk Karotten & 1 Zucchini (in Streifen)','3 EL Sojasauce & 1 TL Honig','1 EL Rapsöl, frischer Ingwer & 1 EL Sesam'],
+ ['Glasnudeln und Edamame mit kochendem Wasser übergießen und 4 Minuten ziehen lassen.','Putenstreifen in Rapsöl scharf anbraten. Karotten, Zucchini und geriebenen Ingwer 3 Minuten mitbraten.','Mit Sojasauce, Honig und einem Spritzer Limettensaft ablöschen.','Nudeln und Edamame unterheben und mit Sesam bestreuen.'],
+ 'Reines Rapsöl plus ein paar Tropfen geröstetes Sesamöl geben das Wok-Aroma.',
+ 'Erfrischend, würzig und frei von Erdnüssen oder Cashews. Sesam und Edamame liefern den Crunch.');
+
+/* --- Büro-Lunch (neu) --- */
+R('Hähnchen-Gemüse-Reis-Pfanne','Büro-Lunch','🍚','Pfanne',20,42,520,2,'chickenrice',
+ ['300 g Hühnerbrustfilet (gewürfelt)','120 g Basmati-Reis','300 g Tiefkühl-Gemüsemix','2 EL Sojasauce','1 EL Rapsöl'],
+ ['Reis nach Packungsanweisung kochen.','Hähnchen in Rapsöl 6 Minuten anbraten, Gemüse 5 Minuten mitbraten.','Reis und Sojasauce unterheben und kurz durchschwenken.'],
+ 'Perfekt zum Vorkochen: hält 3 Tage im Kühlschrank.');
+R('Thunfisch-Avocado-Reis-Bowl','Büro-Lunch','🥑','Kalt',10,38,520,1,'poke',
+ ['1 Dose Thunfisch im eigenen Saft','100 g Gekochter Reis','0.5 Stk Avocado','0.5 Stk Salatgurke','1 EL Sojasauce','1 TL Sesam'],
+ ['Reis in eine Schüssel geben.','Thunfisch, Avocado- und Gurkenwürfel darauf anrichten.','Mit Sojasauce beträufeln und Sesam bestreuen.'],
+ 'Mit Limettensaft wird die Bowl besonders frisch.');
+R('Kichererbsen-Gurken-Salat','Büro-Lunch','🥗','Kalt',8,17,360,1,'chickpeasalad',
+ ['120 g Kichererbsen (Glas, abgespült)','0.5 Stk Salatgurke','1 Stk Tomate','1 EL Olivenöl','1 Spritzer Zitronensaft','1 Handvoll Petersilie'],
+ ['Kichererbsen abspülen und abtropfen lassen.','Gurke und Tomate würfeln und mit den Kichererbsen mischen.','Mit Olivenöl, Zitrone, Salz, Pfeffer und Petersilie anmachen.'],
+ 'Ein hartgekochtes Ei dazu erhöht das Protein.');
+R('Rote-Linsen-Suppe mit Kokosmilch','Büro-Lunch','🍲','Topf',20,24,430,2,'lentilsoup',
+ ['150 g Rote Linsen','1 Stk Zwiebel','1 Stk Karotte','400 ml Gemüsebrühe (milchfrei)','100 ml Kokosmilch','1 TL Currypulver'],
+ ['Zwiebel und Karotte würfeln und mit Curry kurz anschwitzen.','Linsen und Brühe zugeben, 12 Minuten köcheln.','Kokosmilch einrühren, pürieren und abschmecken.'],
+ 'Ein Spritzer Zitronensaft zum Schluss macht sie frisch.');
+R('Griechischer Salat mit Ei (ohne Feta)','Büro-Lunch','🫒','Kalt',10,15,330,1,'greeksalad',
+ ['2 Stk Hartgekochte Eier','1 Stk Tomate','0.5 Stk Salatgurke','6 Stk Oliven','1 EL Olivenöl','0.5 Stk Rote Zwiebel'],
+ ['Tomate, Gurke und Zwiebel grob schneiden.','Mit Oliven und Olivenöl mischen, mit Oregano würzen.','Eier vierteln und obenauf legen.'],
+ 'Gewürfelte Avocado ersetzt den cremigen Feta.');
+R('Reisnudel-Gemüse-Pfanne mit Ei','Büro-Lunch','🍜','Pfanne',15,22,480,1,'friednoodles',
+ ['100 g Reisnudeln','2 Stk Bio-Eier','200 g Gemüsemix (TK oder frisch)','2 EL Sojasauce','1 EL Rapsöl'],
+ ['Reisnudeln nach Packung einweichen oder kochen.','Gemüse in Rapsöl 4 Minuten braten, Eier einrühren und stocken lassen.','Nudeln und Sojasauce untermischen.'],
+ 'Frischer Ingwer gibt Schärfe und Aroma.');
+R('Hähnchenspieße mit Paprika aus dem Airfryer','Büro-Lunch','🍢','Airfryer',20,40,330,2,'chickenskewers',
+ ['300 g Hühnerbrust (Würfel)','1 Stk Paprika','1 Stk Zucchini','1 EL Olivenöl','1 TL Paprikapulver'],
+ ['Hähnchen, Paprika und Zucchini mit Öl und Gewürzen mischen und auf Spieße stecken.','12 Minuten bei 190 °C im Airfryer garen, einmal wenden.','Heiß oder kalt servieren.'],
+ 'Holzspieße vorher kurz wässern.');
+R('Quinoa-Kichererbsen-Topf','Büro-Lunch','🍲','Topf',20,22,480,2,'quinoa',
+ ['120 g Quinoa','1 Dose Kichererbsen (240 g)','1 Stk Paprika','250 ml Gemüsebrühe (milchfrei)','1 TL Kreuzkümmel'],
+ ['Quinoa heiß abspülen.','Mit Brühe, Paprikawürfeln und Kreuzkümmel 12 Minuten köcheln.','Kichererbsen unterheben und 3 Minuten ziehen lassen.'],
+ 'Kalt als Salat schmeckt es genauso gut.');
+R('Linsensalat mit Paprika & Petersilie','Büro-Lunch','🥗','Kalt',10,20,390,1,'lentilsalad',
+ ['150 g Gekochte Linsen (Dose)','1 Stk Paprika','1 Handvoll Petersilie','1 EL Olivenöl','1 EL Apfelessig','1 Stk Hartgekochtes Ei'],
+ ['Linsen abspülen und abtropfen lassen.','Paprika würfeln und mit Linsen und Petersilie mischen.','Mit Öl, Essig, Salz und Pfeffer anmachen und das Ei dazu servieren.'],
+ 'Zieht über Nacht noch besser durch.');
+R('Eier-Reis (Egg Fried Rice)','Büro-Lunch','🍳','Pfanne',12,20,470,1,'friedrice',
+ ['150 g Gekochter Reis (vom Vortag)','2 Stk Bio-Eier','100 g Erbsen & Karotten (TK)','1 EL Sojasauce','1 EL Rapsöl'],
+ ['Gemüse in Rapsöl 3 Minuten braten.','Reis zugeben und knusprig anbraten.','Eier einrühren, stocken lassen und mit Sojasauce abschmecken.'],
+ 'Reis vom Vortag wird viel körniger als frischer.');
+R('Lachs-Reis-Box mit Gurke','Büro-Lunch','🍱','Pfanne',15,32,560,1,'salmonrice',
+ ['150 g Lachsfilet','100 g Reis (gekocht)','0.5 Stk Salatgurke','1 EL Sojasauce','1 TL Sesam'],
+ ['Lachs auf der Hautseite in Öl 4 Minuten braten, wenden und 2 Minuten fertig garen.','Reis in die Box füllen, Gurkenscheiben dazu.','Lachs zerpflücken, mit Sojasauce und Sesam toppen.'],
+ 'Schmeckt auch kalt hervorragend.');
+R('Bohnen-Mais-Salat mit Limette','Büro-Lunch','🌽','Kalt',8,18,350,2,'beansalad',
+ ['1 Dose Kidneybohnen (240 g)','1 Dose Mais (140 g)','1 Stk Paprika','1 Stk Limette (Saft)','1 EL Olivenöl'],
+ ['Bohnen und Mais abspülen und abtropfen.','Paprika würfeln und alles mischen.','Mit Limettensaft, Öl, Salz und Kreuzkümmel abschmecken.'],
+ 'Frischer Koriander oder Petersilie passt gut dazu.');
+R('Hühnersuppe mit Karotten & Nudeln','Büro-Lunch','🍲','Topf',25,32,380,2,'chickensoup',
+ ['250 g Hühnerbrust','2 Stk Karotten','60 g Suppennudeln','800 ml Gemüsebrühe (milchfrei)','1 Bund Petersilie'],
+ ['Brühe aufkochen, Hühnerbrust und Karottenscheiben 15 Minuten köcheln.','Hühnerbrust herausnehmen und zerzupfen.','Nudeln 5 Minuten mitkochen, Fleisch zurückgeben und mit Petersilie servieren.'],
+ 'Ein Stück Ingwer in der Brühe tut gut bei Erkältung.');
+R('Rindfleisch-Brokkoli-Pfanne','Büro-Lunch','🥦','Pfanne',15,36,410,2,'beefbroccoli',
+ ['250 g Rinderstreifen','300 g Brokkoli','2 EL Sojasauce','1 Stk Knoblauchzehe','1 TL Ingwer (gerieben)','1 EL Rapsöl'],
+ ['Brokkoli 3 Minuten blanchieren.','Rindfleisch in Rapsöl 3 Minuten scharf anbraten, Knoblauch und Ingwer zugeben.','Brokkoli und Sojasauce untermischen und 2 Minuten schwenken.'],
+ 'Mit Reis oder Reisnudeln servieren.');
+R('Kichererbsen-Bällchen aus dem Airfryer','Büro-Lunch','🧆','Airfryer',20,16,340,2,'falafel',
+ ['240 g Kichererbsen (Dose, abgetropft)','1 Stk Zwiebel (klein)','3 EL Hafermehl','1 TL Kreuzkümmel','1 Bund Petersilie'],
+ ['Alles im Mixer grob pürieren und würzen.','Kleine Bällchen formen.','12 Minuten bei 190 °C im Airfryer garen, einmal wenden.'],
+ 'Mit Hummus oder Tomatensalat servieren.');
+R('Süßkartoffel-Kichererbsen-Pfanne mit Spinat','Büro-Lunch','🍠','Pfanne',20,15,430,2,'sweetpotatocurry',
+ ['300 g Süßkartoffel (Würfel)','1 Dose Kichererbsen (240 g)','100 g Babyspinat','1 TL Kurkuma','1 EL Rapsöl'],
+ ['Süßkartoffelwürfel in Rapsöl 10 Minuten bei mittlerer Hitze braten.','Kichererbsen und Kurkuma zugeben und 3 Minuten mitbraten.','Spinat unterheben, bis er zusammenfällt, und würzen.'],
+ 'Ein Klecks Kokosjoghurt macht es cremig.');
+R('Gemüse-Linsen-Eintopf','Büro-Lunch','🍲','Topf',25,22,410,2,'stew',
+ ['150 g Rote oder grüne Linsen','2 Stk Karotten','1 Stk Zucchini','400 g Passierte Tomaten','1 TL Paprikapulver'],
+ ['Karotten und Zucchini würfeln.','Mit Linsen, Tomaten und 300 ml Wasser 20 Minuten köcheln.','Mit Paprika, Salz und Pfeffer abschmecken.'],
+ 'Lässt sich prima einfrieren.');
+R('Puten-Gemüse-Blech','Büro-Lunch','🦃','Ofen/Airfryer',25,38,430,2,'roastedturkey',
+ ['300 g Putenbrust (Würfel)','1 Stk Zucchini','1 Stk Paprika','250 g Kartoffeln','2 EL Olivenöl'],
+ ['Alles würfeln und mit Öl, Salz, Pfeffer und Paprika mischen.','Auf ein Blech geben (Airfryer: 15 Minuten bei 190 °C).','Im Ofen bei 200 °C ca. 25 Minuten garen, einmal wenden.'],
+ 'Ein Blech, wenig Abwasch.');
+
+/* --- Abendessen (Original) --- */
+R('Linsen-Pasta „Bolognese“ vom Rind mit Wurzelgemüse','Abendessen','🍝','Pfanne',25,48,580,2,'bolognese',
+ ['250 g Mageres Rinderfaschiertes','160 g Rote-Linsen-Penne oder Dinkel-Pasta','1 Dose Passierte Tomaten (400 g)','1 Stk Karotte & 1 Zwiebel (fein gewürfelt)','1 EL Olivenöl & 1 EL Tomatenmark','1 Bund Basilikum & Oregano'],
+ ['Olivenöl erhitzen, Zwiebel und Karotte 3 Minuten anschwitzen.','Faschiertes krümelig anbraten, Tomatenmark kurz mitrösten.','Mit Passata und 50 ml Wasser ablöschen, mit Salz, Pfeffer und Oregano 12 Minuten köcheln.','Pasta al dente kochen und mit Sauce und Basilikum servieren.'],
+ 'Statt Reibkäse: gehackte Kürbiskerne mit Hefeflocken und Knoblauch mischen.',
+ 'Doppeltes Protein durch rote Linsen-Pasta und mageres Rinderfaschiertes. Ganz ohne Parmesan ein echtes Soulfood!');
+R('Cremiges Kokos-Limetten-Lachsfilet auf jungem Blattspinat','Abendessen','🍣','Pfanne',20,39,540,2,'salmonspinach',
+ ['300 g Frisches Lachsfilet (2 Stück)','200 ml Kokosmilch','200 g Junger Blattspinat','120 g Basmati-Reis','1 Stk Bio-Limette (Saft & Abrieb)','1 EL Rapsöl'],
+ ['Reis nach Packung garen.','Lachs tupfen, salzen und in Rapsöl auf der Hautseite 4 Minuten anbraten, wenden und herausnehmen.','Kokosmilch, Limettenabrieb und -saft in die Pfanne gießen und 2 Minuten einkochen.','Spinat darin zusammenfallen lassen, Lachs zurücklegen und 2 Minuten ziehen lassen.'],
+ 'Dazu passen Basmati-Reis oder Petersilienkartoffeln.',
+ 'Saftig gebratener Lachs in samtiger Kokosmilch-Limetten-Sauce – schmeckt wie im Restaurant und ist 100% milchfrei.');
+R('Steirische Kürbiskern-Krusten-Hühnerbrust mit Ofen-Süßkartoffeln','Abendessen','🍗','Ofen/Airfryer',30,46,550,2,'chickenbreast',
+ ['320 g Hühnerbrustfilet','1 Stk Bio-Ei (zum Panieren)','50 g Steirische Kürbiskerne (fein gehackt)','400 g Süßkartoffeln & Brokkoliröschen','2 EL Rapsöl oder Olivenöl'],
+ ['Ofen auf 200 °C Umluft vorheizen. Süßkartoffelspalten mit 1 EL Öl und Salz 15 Minuten vorbacken.','Kürbiskerne fein hacken und auf einen Teller geben.','Hühnerbrust salzen, durch das verquirlte Ei ziehen und fest in die Kürbiskerne drücken.','Hühnerbrust und Brokkoli aufs Blech legen und weitere 15 Minuten backen.'],
+ 'Ein paar Tropfen steirisches Kürbiskernöl über die fertigen Süßkartoffeln geben.',
+ 'Eine knusprige Ei-Kürbiskern-Panade macht das Hühnerfilet saftig – ganz ohne Mehl, Milch oder Nüsse!');
+R('Goldenes Kichererbsen-Räuchertofu-Curry mit Babyspinat','Abendessen','🍛','Pfanne',20,28,490,2,'curry',
+ ['200 g Fester Räuchertofu (gewürfelt)','1 Dose Kichererbsen (240 g)','200 ml Kokosmilch','150 g Babyspinat & Kirschtomaten','1.5 TL Mildes Currypulver & Kurkuma','1 EL Kokosöl oder Rapsöl'],
+ ['Räuchertofu in heißem Öl 5 Minuten rundherum knusprig anbraten.','Curry und Kurkuma kurz mitrösten, mit Kokosmilch und 50 ml Wasser ablöschen.','Kichererbsen und halbierte Tomaten zugeben und 8 Minuten köcheln.','Spinat unterheben, mit Salz und Limettensaft abschmecken.'],
+ 'Tofu vorher mit Küchenpapier ausdrücken – er wird doppelt so knusprig.',
+ 'Pflanzliches Power-Abendessen mit angebratenem Räuchertofu, Kichererbsen und wärmendem Kurkuma-Kokos-Sud.');
+
+/* --- Abendessen: Airfryer --- */
+R('Airfryer-Lachs mit Zitrone & Brokkoli','Abendessen','🐟','Airfryer',15,36,450,2,'salmonfillet',
+ ['300 g Lachsfilet (2 Stück)','250 g Brokkoliröschen','1 EL Olivenöl','1 Stk Zitrone'],
+ ['Brokkoli mit halbem EL Öl und Salz mischen und 4 Minuten bei 190 °C vorgaren.','Lachs mit Öl, Salz, Pfeffer und Zitronenscheiben dazulegen.','Weitere 8 Minuten garen.'],
+ 'Lachs ist fertig, wenn er sich leicht mit der Gabel teilen lässt.');
+R('Knusprige Hähnchenschenkel mit Kräutern','Abendessen','🍗','Airfryer',30,34,480,2,'chickenlegs',
+ ['4 Stk Hähnchenunterschenkel','1 EL Olivenöl','1 TL Paprikapulver','1 TL Oregano','1 Stk Knoblauchzehe'],
+ ['Schenkel mit Öl, Gewürzen und gepresstem Knoblauch einreiben.','18 Minuten bei 190 °C im Airfryer garen.','Wenden und weitere 8 Minuten knusprig garen.'],
+ 'Kerntemperatur 75 °C – dann ist das Fleisch durch.');
+R('Hähnchen-Nuggets mit Haferpanade','Abendessen','🍗','Airfryer',20,38,400,2,'nuggets',
+ ['300 g Hühnerbrust (Stücke)','1 Stk Bio-Ei','5 EL Zarte Haferflocken (fein gemahlen)','1 TL Paprikapulver'],
+ ['Hähnchenstücke salzen, durch das verquirlte Ei ziehen.','In Haferflocken mit Paprika wenden und andrücken.','10 Minuten bei 190 °C im Airfryer knusprig garen, einmal wenden.'],
+ 'Mit selbstgemachtem Ketchup oder Senf dippen.');
+R('Süßkartoffel-Pommes aus dem Airfryer','Abendessen','🍟','Airfryer',20,4,220,2,'sweetpotatofries',
+ ['400 g Süßkartoffeln','1 EL Olivenöl','1 TL Paprikapulver'],
+ ['Süßkartoffeln in Stifte schneiden.','Mit Öl, Paprika und Salz mischen.','15 Minuten bei 200 °C garen, zwischendurch schütteln.'],
+ 'Nicht zu viele auf einmal – dann werden sie knusprig.');
+R('Putenschnitzel mit Kürbiskernkruste','Abendessen','🥩','Airfryer',20,42,410,2,'schnitzel',
+ ['2 Stk Putenschnitzel (ca. 300 g)','1 Stk Bio-Ei','40 g Kürbiskerne (gehackt)','2 EL Hafermehl'],
+ ['Schnitzel flach klopfen und salzen.','Erst in Hafermehl, dann in Ei, dann in gehackten Kürbiskernen wenden.','10 Minuten bei 190 °C garen, nach 5 Minuten wenden.'],
+ 'Zitronenspalte dazu, wie bei Oma.');
+R('Rindersteak-Streifen mit Ofengemüse','Abendessen','🥩','Airfryer',20,36,420,2,'steak',
+ ['300 g Rindersteak','1 Stk Paprika','1 Stk Zucchini','1 EL Olivenöl'],
+ ['Gemüse würfeln, mit Öl mischen und 8 Minuten bei 200 °C garen.','Steak salzen und pfeffern, auf das Gemüse legen.','6–8 Minuten garen, 3 Minuten ruhen lassen und in Streifen schneiden.'],
+ 'Fleisch immer ruhen lassen, dann bleibt es saftig.');
+R('Bunter Ofengemüse-Mix mit Ei','Abendessen','🥕','Airfryer',20,14,280,2,'roastedvegetables',
+ ['500 g Gemüse (Zucchini, Paprika, Karotte)','1 EL Olivenöl','4 Stk Bio-Eier','1 TL Kräuter der Provence'],
+ ['Gemüse würfeln und mit Öl und Kräutern mischen.','15 Minuten bei 190 °C im Airfryer garen, zweimal schütteln.','Eier hart kochen und dazu servieren.'],
+ 'Reste schmecken am nächsten Tag kalt als Salat.');
+R('Kabeljau mit Tomaten & Kräutern','Abendessen','🐟','Airfryer',15,34,280,2,'cod',
+ ['300 g Kabeljaufilet','10 Stk Kirschtomaten','1 EL Olivenöl','1 Stk Zitrone','1 Bund Petersilie'],
+ ['Kabeljau mit Öl, Salz und Zitronensaft einreiben.','Mit halbierten Tomaten in den Airfryer legen.','10 Minuten bei 180 °C garen und mit Petersilie bestreuen.'],
+ 'Mit Reis oder Kartoffeln eine leichte Mahlzeit.');
+R('Knoblauch-Garnelen aus dem Airfryer','Abendessen','🍤','Airfryer',10,30,250,2,'shrimp',
+ ['300 g Garnelen (geschält)','2 Stk Knoblauchzehen','1 EL Olivenöl','1 Stk Zitrone'],
+ ['Garnelen mit Öl, gepresstem Knoblauch und Salz mischen.','6 Minuten bei 200 °C garen, einmal schütteln.','Mit Zitronensaft und Petersilie servieren.'],
+ 'Nicht zu lange garen, sonst werden sie zäh.');
+R('Zucchini-Sticks mit Haferpanade','Abendessen','🥒','Airfryer',18,12,260,2,'zucchinisticks',
+ ['2 Stk Zucchini','1 Stk Bio-Ei','5 EL Zarte Haferflocken (fein gemahlen)','1 TL Paprikapulver'],
+ ['Zucchini in Stifte schneiden und trocken tupfen.','Erst in Ei, dann in Hafer mit Paprika wenden.','12 Minuten bei 200 °C knusprig garen.'],
+ 'Dazu passt ein Dip aus Kokosjoghurt, Zitrone und Dill.');
+R('Rosmarin-Kartoffelspalten','Abendessen','🥔','Airfryer',25,6,230,2,'potatowedges',
+ ['500 g Kartoffeln','1 EL Olivenöl','1 Zweig Rosmarin','1 TL Paprikapulver'],
+ ['Kartoffeln in Spalten schneiden und mit Öl, Salz, Paprika mischen.','Rosmarin dazulegen.','20 Minuten bei 200 °C garen, nach der Hälfte schütteln.'],
+ 'Dazu ein Spiegelei oder Hähnchen für mehr Protein.');
+
+/* --- Abendessen: Pfanne --- */
+R('Rindfleisch-Reis-Pfanne','Abendessen','🍚','Pfanne',20,38,540,2,'beefrice',
+ ['250 g Rinderfaschiertes','120 g Reis','1 Stk Paprika','1 Stk Zwiebel','2 EL Passierte Tomaten'],
+ ['Reis nach Packung kochen.','Zwiebel und Faschiertes anbraten, Paprika und Tomaten zugeben.','Reis untermischen und mit Paprikapulver würzen.'],
+ 'Ein Spiegelei obendrauf macht es zum Festessen.');
+R('Garnelen-Zucchini-Nudeln','Abendessen','🍤','Pfanne',15,32,380,2,'shrimppasta',
+ ['250 g Garnelen','2 Stk Zucchini (Spiralen)','2 Stk Knoblauchzehen','1 EL Olivenöl','1 Stk Zitrone'],
+ ['Knoblauch in Öl kurz anbraten, Garnelen 3 Minuten braten.','Zucchinispiralen zugeben und 2 Minuten schwenken.','Mit Zitronensaft, Salz und Pfeffer abschmecken.'],
+ 'Zucchini nicht zu lange garen, sonst wird es wässrig.');
+R('Hähnchen in Tomaten-Basilikum-Sauce','Abendessen','🍅','Pfanne',20,40,380,2,'chickentomato',
+ ['300 g Hühnerbrust','400 g Passierte Tomaten','1 Stk Zwiebel','1 EL Olivenöl','1 Handvoll Basilikum'],
+ ['Hähnchen in Streifen schneiden und in Öl 5 Minuten anbraten.','Zwiebel zugeben, mit Tomaten ablöschen.','10 Minuten köcheln und mit Basilikum servieren.'],
+ 'Dazu passen Reis, Kartoffeln oder Linsen-Pasta.');
+R('Puten-Curry-Geschnetzeltes','Abendessen','🍛','Pfanne',20,38,430,2,'turkeycurry',
+ ['300 g Putenbrust (Streifen)','200 ml Kokosmilch','1 Stk Paprika','1 EL Currypulver','1 EL Rapsöl'],
+ ['Putenstreifen in Rapsöl 5 Minuten anbraten.','Paprika und Curry zugeben und 2 Minuten mitbraten.','Mit Kokosmilch ablöschen und 6 Minuten köcheln.'],
+ 'Mit Basmati-Reis servieren.');
+R('Lachs auf Spinat aus der Pfanne','Abendessen','🐟','Pfanne',15,35,420,2,'salmon',
+ ['300 g Lachsfilet','200 g Blattspinat','1 EL Olivenöl','1 Stk Knoblauchzehe','1 Stk Zitrone'],
+ ['Lachs in Öl auf der Hautseite 4 Minuten braten, wenden und 2 Minuten garen, herausnehmen.','Knoblauch und Spinat in derselben Pfanne zusammenfallen lassen.','Mit Zitronensaft abschmecken und den Lachs darauf anrichten.'],
+ 'Dazu ein paar Salzkartoffeln.');
+R('Faschierte Laibchen mit Gurkensalat','Abendessen','🥩','Pfanne',20,38,430,2,'meatballs',
+ ['300 g Rinderfaschiertes','1 Stk Bio-Ei','3 EL Hafermehl','1 Stk Zwiebel','1 Stk Salatgurke'],
+ ['Faschiertes mit Ei, Hafermehl, fein gehackter Zwiebel, Salz und Pfeffer verkneten.','Flache Laibchen formen und in Rapsöl 4 Minuten pro Seite braten.','Gurke hobeln, mit Essig, Öl und Salz anmachen und dazu servieren.'],
+ 'Ein Hauch Majoran macht sie wie von Oma.');
+R('Kartoffel-Gemüse-Pfanne mit Ei','Abendessen','🍳','Pfanne',20,19,400,2,'potatopan',
+ ['400 g Kartoffeln (gekocht)','4 Stk Bio-Eier','1 Stk Paprika','1 Stk Zwiebel','1 EL Rapsöl'],
+ ['Kartoffeln in Scheiben schneiden und in Rapsöl knusprig braten.','Zwiebel und Paprika zugeben und 4 Minuten braten.','Eier verquirlen, darübergießen und stocken lassen.'],
+ 'Perfekte Resteverwertung von gekochten Kartoffeln.');
+R('Thunfisch-Tomaten-Pasta','Abendessen','🍝','Topf/Pfanne',15,36,520,2,'tunapasta',
+ ['160 g Dinkelnudeln','1 Dose Thunfisch','400 g Passierte Tomaten','1 Stk Knoblauchzehe','1 EL Olivenöl'],
+ ['Nudeln nach Packung kochen.','Knoblauch in Öl anschwitzen, Tomaten zugeben und 6 Minuten köcheln.','Thunfisch unterrühren, Nudeln untermischen.'],
+ 'Ein paar Oliven geben extra Aroma.');
+R('Linsen-Spaghetti mit Tomatensauce','Abendessen','🍝','Topf',15,30,480,2,'spaghetti',
+ ['160 g Linsen-Spaghetti','400 g Passierte Tomaten','1 Stk Knoblauchzehe','1 EL Olivenöl','1 Handvoll Basilikum'],
+ ['Spaghetti nach Packung bissfest kochen.','Knoblauch in Öl anschwitzen, Tomaten 8 Minuten köcheln.','Pasta mit Sauce mischen und Basilikum darüberstreuen.'],
+ 'Mit gerösteten Kürbiskernen und Hefeflocken statt Parmesan toppen.');
+
+/* --- Abendessen: Topf --- */
+R('Schnelles Chili con Carne','Abendessen','🌶️','Topf',25,40,480,2,'chili',
+ ['250 g Rinderfaschiertes','1 Dose Kidneybohnen','1 Dose Stückige Tomaten (400 g)','1 Stk Paprika','1 TL Chili & Kreuzkümmel'],
+ ['Faschiertes im Topf krümelig anbraten.','Paprikawürfel, Gewürze, Tomaten und abgespülte Bohnen zugeben.','20 Minuten köcheln und abschmecken.'],
+ 'Am nächsten Tag schmeckt es noch besser.');
+R('Kokos-Hühner-Curry','Abendessen','🍛','Topf',25,38,470,2,'chickencurry',
+ ['300 g Hühnerbrust','400 ml Kokosmilch','1 EL Currypulver','150 g Babyspinat','120 g Reis'],
+ ['Reis nach Packung kochen.','Hähnchenwürfel mit Curry anbraten, Kokosmilch zugeben und 12 Minuten köcheln.','Spinat unterheben und mit Reis servieren.'],
+ 'Limettensaft zum Schluss bringt Frische.');
+R('Kürbissuppe mit Kokosmilch','Abendessen','🎃','Topf',25,8,260,2,'pumpkinsoup',
+ ['600 g Hokkaido-Kürbis','1 Stk Zwiebel','400 ml Gemüsebrühe (milchfrei)','100 ml Kokosmilch','15 g Kürbiskerne'],
+ ['Kürbis würfeln (Schale bleibt dran) und mit Zwiebel in Brühe 15 Minuten weich kochen.','Kokosmilch zugeben und fein pürieren.','Mit Kürbiskernen und ein paar Tropfen Kürbiskernöl servieren.'],
+ 'Hokkaido muss man nicht schälen.');
+R('Tomatensuppe mit Reis','Abendessen','🍅','Topf',20,9,280,2,'tomatosoup',
+ ['400 g Passierte Tomaten','60 g Reis','400 ml Gemüsebrühe (milchfrei)','1 Stk Zwiebel','1 EL Olivenöl'],
+ ['Zwiebel in Öl anschwitzen.','Tomaten, Brühe und Reis zugeben und 15 Minuten köcheln.','Mit Salz, Pfeffer und Basilikum abschmecken.'],
+ 'Ein Spiegelei drauf macht sie sättigender.');
+R('Schnelles Rindsgulasch','Abendessen','🍲','Topf',35,38,430,2,'goulash',
+ ['300 g Rindfleisch (Würfel)','2 Stk Zwiebeln','1 EL Paprikapulver (edelsüß)','1 EL Tomatenmark','1 EL Rapsöl'],
+ ['Zwiebeln in Rapsöl goldbraun rösten, Fleisch zugeben und scharf anbraten.','Paprika und Tomatenmark kurz mitrösten, mit 300 ml Wasser ablöschen.','Zugedeckt ca. 25 Minuten sanft köcheln, bis das Fleisch zart ist.'],
+ 'Mit Kartoffeln, Reis oder Gurkensalat servieren.');
+R('Kichererbsen-Spinat-Eintopf','Abendessen','🍲','Topf',20,18,380,2,'chickpeastew',
+ ['1 Dose Kichererbsen (240 g)','200 g Blattspinat','400 g Stückige Tomaten','1 TL Kreuzkümmel','1 EL Olivenöl'],
+ ['Kreuzkümmel in Öl kurz anrösten.','Tomaten und Kichererbsen zugeben und 10 Minuten köcheln.','Spinat unterrühren und würzen.'],
+ 'Ein Spiegelei oder Hähnchenstreifen dazu erhöhen das Protein.');
+R('Karotten-Ingwer-Suppe mit Kokos','Abendessen','🥕','Topf',20,6,250,2,'carrotsoup',
+ ['500 g Karotten','1 Stück Ingwer (2 cm)','400 ml Gemüsebrühe (milchfrei)','100 ml Kokosmilch'],
+ ['Karotten und Ingwer klein schneiden.','In Brühe 15 Minuten weich kochen.','Kokosmilch zugeben, fein pürieren und abschmecken.'],
+ 'Gerösteter Sesam obendrauf gibt Biss.');
+R('Hähnchen-Reis-Topf (One Pot)','Abendessen','🍲','Topf',25,40,520,2,'onepot',
+ ['300 g Hühnerbrust (Würfel)','150 g Reis','1 Stk Paprika','400 ml Gemüsebrühe (milchfrei)','1 TL Paprikapulver'],
+ ['Hähnchen im Topf 4 Minuten anbraten.','Paprika, Reis, Gewürze und Brühe zugeben.','Zugedeckt 15 Minuten garen, kurz ruhen lassen.'],
+ 'Nur ein Topf – kaum Abwasch.');
+
+/* --- Süßes & Backen (Original) --- */
+R('Saftiger Apfel-Zimt-Haferkuchen vom Blech (Mit Ei & Kokosöl)','Süßes & Backen','🥧','Ofen',35,11,290,6,'applecake',
+ ['3 Stk Bio-Eier (Größe L)','200 g Zarte Haferflocken (davon 150 g fein gemahlen)','3 Stk Säuerliche Äpfel (in Spalten)','120 g Kokosjoghurt oder ungesüßtes Apfelmus','50 ml Geschmolzenes Kokosöl oder Rapsöl','50 g Ahornsirup oder Kokosblütenzucker','2 TL Backpulver & 1.5 TL Ceylon-Zimt'],
+ ['Ofen auf 180 °C Ober-/Unterhitze vorheizen. Eine kleine Springform (22 cm) mit Backpapier auslegen.','Eier mit Ahornsirup 3 Minuten schaumig-hell aufschlagen.','Kokosjoghurt und flüssiges Kokosöl unterrühren. Gemahlene Haferflocken, Backpulver und Zimt kurz unterheben.','Teig in die Form streichen, mit Apfelspalten belegen und 25–30 Minuten goldbraun backen.'],
+ 'Haferflocken fein mahlen – das ersetzt Weizenmehl und gemahlene Mandeln gleichzeitig.',
+ 'Schmeckt wie bei Oma, ist aber 100% frei von Butter, Milch und Mandeln! Aufgeschlagene Eier machen ihn herrlich locker.');
+R('Nussfreies Protein-Bananenbrot mit Kürbiskern-Kruste','Süßes & Backen','🍌','Ofen',45,10,275,8,'bananabread',
+ ['3 Stk Sehr reife Bananen','3 Stk Bio-Eier','220 g Fein gemahlene Haferflocken (Hafermehl)','40 g Steirische Kürbiskerne','40 g Dunkle Schokostückchen (mind. 80% Kakao, milchfrei)','2 EL Mildes Rapsöl oder Kokosöl','1 Pck. Backpulver & 1 TL Zimt'],
+ ['Ofen auf 180 °C vorheizen und eine Kastenform mit Backpapier auskleiden.','Bananen zerdrücken und mit Eiern und Öl verquirlen.','Hafermehl, Backpulver, Zimt, Schokostückchen und die Hälfte der Kürbiskerne unterheben.','In die Form füllen, restliche Kürbiskerne darüberstreuen und ca. 40 Minuten backen (Stäbchenprobe!).'],
+ 'Je reifer die Bananen, desto weniger zusätzliche Süße brauchst du.',
+ 'Super saftig ohne ein Gramm Nüsse oder Butter. Dunkle milchfreie Schokodrops und Kürbiskerne sorgen für den Biss.');
+R('Fluffige Beeren-Kokos-Muffins (100% Milch- & Nussfrei)','Süßes & Backen','🧁','Ofen',25,9,230,6,'muffins',
+ ['2 Stk Bio-Eier','150 g Kokosjoghurt (natur)','160 g Dinkelmehl oder feines Hafermehl','30 g Kokosraspeln','120 g Heidelbeeren oder Himbeeren','40 ml Ahornsirup & 2 EL Rapsöl','1.5 TL Backpulver'],
+ ['Ofen auf 180 °C vorheizen, 6–8 Muffinförmchen bereitstellen.','Eier, Kokosjoghurt, Rapsöl und Ahornsirup cremig verrühren.','Mehl, Kokosraspeln und Backpulver mischen, zügig unterheben, zuletzt die Beeren unterziehen.','In die Förmchen verteilen und 18–20 Minuten goldgelb backen.'],
+ 'Lassen sich einfrieren und einzeln kurz aufbacken.',
+ 'Perfekt zum Kaffee oder als süßer Büro-Snack: Eier und Kokosjoghurt machen sie wunderbar locker.');
+
+/* --- Süßes & Backen (neu) --- */
+R('Apfelchips mit Zimt aus dem Airfryer','Süßes & Backen','🍎','Airfryer',25,1,90,2,'applechips',
+ ['2 Stk Äpfel','1 TL Zimt'],
+ ['Äpfel in hauchdünne Scheiben schneiden und mit Zimt bestäuben.','Im Airfryer bei 150 °C 12–15 Minuten trocknen, einmal wenden.','Auskühlen lassen, dann werden sie knusprig.'],
+ 'So dünn wie möglich schneiden.');
+R('Mini-Bananen-Muffins aus dem Airfryer','Süßes & Backen','🧁','Airfryer',20,6,150,6,'bananamuffin',
+ ['2 Stk Reife Bananen','2 Stk Bio-Eier','100 g Zarte Haferflocken','1 TL Backpulver'],
+ ['Bananen zerdrücken, mit Eiern, Haferflocken und Backpulver verrühren.','In Silikonförmchen füllen.','12–15 Minuten bei 170 °C im Airfryer backen.'],
+ 'Ein paar dunkle Schokostückchen machen sie zum Highlight.');
+R('Zwei-Zutaten-Haferkekse','Süßes & Backen','🍪','Ofen/Airfryer',20,4,110,8,'oatcookies',
+ ['2 Stk Reife Bananen','120 g Zarte Haferflocken','30 g Dunkle Schokostückchen (milchfrei)'],
+ ['Bananen zerdrücken und mit Haferflocken und Schokostückchen mischen.','Kleine Häufchen aufs Blech oder in den Airfryer setzen.','15 Minuten bei 180 °C backen (Airfryer: 10 Minuten bei 170 °C).'],
+ 'Nur auf Schokolade ohne Milchpulver achten.');
+R('Schoko-Bananen-Eis','Süßes & Backen','🍫','Kalt',5,3,160,1,'icecream',
+ ['2 Stk Gefrorene Bananen','1 EL Kakaopulver','2 EL Hafermilch'],
+ ['Gefrorene Bananenstücke mit Kakao und Hafermilch pürieren.','Sofort löffeln oder 20 Minuten ins Gefrierfach stellen.'],
+ 'Bananen in Stücken einfrieren, dann geht es blitzschnell.');
+R('Kaiserschmarrn mit Apfel','Süßes & Backen','🥞','Pfanne',20,17,430,2,'pancake',
+ ['3 Stk Bio-Eier','80 g Hafermehl (fein gemahlene Haferflocken)','150 ml Hafermilch','1 Stk Apfel (in Stücken)','1 EL Kokosöl','1 EL Ahornsirup'],
+ ['Eier, Hafermehl und Hafermilch glatt rühren, Apfelstücke unterheben.','Kokosöl erhitzen, Teig einfüllen und 3 Minuten backen, wenden.','Mit zwei Gabeln zerreißen, kurz karamellisieren und mit Ahornsirup servieren.'],
+ 'Rosinen und Zimt passen perfekt dazu.');
+R('Süßkartoffel-Brownies','Süßes & Backen','🍫','Ofen',35,7,180,9,'brownies',
+ ['250 g Süßkartoffel (gekocht, püriert)','2 Stk Bio-Eier','4 EL Kakaopulver','80 g Hafermehl','3 EL Ahornsirup','1 TL Backpulver'],
+ ['Alle Zutaten glatt verrühren.','In eine mit Backpapier ausgelegte Form füllen.','25 Minuten bei 180 °C backen und gut auskühlen lassen.'],
+ 'Über Nacht im Kühlschrank werden sie noch fudgiger.');
+R('Schoko-Chia-Pudding','Süßes & Backen','🍮','Kalt',5,9,300,1,'chocolatepudding',
+ ['3 EL Chiasamen','150 ml Kokosmilch','1 EL Kakaopulver','1 EL Ahornsirup'],
+ ['Alle Zutaten verrühren.','Nach 10 Minuten nochmals umrühren.','Mindestens 2 Stunden kühlen.'],
+ 'Mit Himbeeren servieren.');
+R('Bratäpfel mit Zimt & Rosinen','Süßes & Backen','🍎','Ofen/Airfryer',25,2,170,2,'bakedapple',
+ ['2 Stk Äpfel','2 EL Rosinen','1 TL Zimt','1 TL Kokosöl'],
+ ['Kerngehäuse der Äpfel ausstechen.','Mit Rosinen, Zimt und Kokosöl füllen.','20 Minuten bei 180 °C backen (Airfryer: 15 Minuten bei 170 °C).'],
+ 'Dazu eine Kugel Schoko-Bananen-Eis.');
+R('Kokos-Reispudding','Süßes & Backen','🍚','Topf',25,6,330,2,'ricepudding',
+ ['100 g Rundkornreis','400 ml Kokosmilch','150 ml Wasser','1 EL Ahornsirup','1 TL Zimt'],
+ ['Reis mit Kokosmilch und Wasser aufkochen.','Bei kleiner Hitze 20 Minuten unter Rühren quellen lassen.','Mit Ahornsirup süßen und Zimt bestreuen.'],
+ 'Mit Apfelmus oder Beeren servieren.');
+R('Saftiger Karotten-Hafer-Kuchen','Süßes & Backen','🥕','Ofen',40,9,240,8,'carrotcake',
+ ['3 Stk Bio-Eier','3 Stk Karotten (gerieben)','200 g Hafermehl','60 ml Rapsöl','60 ml Ahornsirup','2 TL Backpulver & 1 TL Zimt'],
+ ['Eier mit Ahornsirup und Öl schaumig rühren.','Karotten, Hafermehl, Backpulver und Zimt unterheben.','In einer Kastenform 35 Minuten bei 180 °C backen.'],
+ 'Rosinen im Teig geben extra Süße.');
+R('Beeren-Energiebällchen (nussfrei)','Süßes & Backen','🟤','Kalt',10,4,110,10,'energyballs',
+ ['100 g Datteln (entsteint)','100 g Zarte Haferflocken','30 g Kürbiskerne','2 EL Kokosraspeln','1 EL Kakaopulver'],
+ ['Datteln mit Hafer, Kürbiskernen und Kakao im Mixer zerkleinern.','Zu kleinen Kugeln formen.','In Kokosraspeln wälzen und kühl stellen.'],
+ 'Im Kühlschrank 1 Woche haltbar.');
+R('Palatschinken mit Marmelade','Süßes & Backen','🥞','Pfanne',20,14,350,2,'crepes',
+ ['2 Stk Bio-Eier','80 g Dinkel- oder Hafermehl','200 ml Hafermilch','1 EL Kokosöl','3 EL Marmelade'],
+ ['Eier, Mehl und Hafermilch glatt rühren und 5 Minuten ruhen lassen.','Kokosöl erhitzen und dünne Palatschinken backen.','Mit Marmelade bestreichen und einrollen.'],
+ 'Marillenmarmelade passt am besten.');
+R('Himbeer-Hafer-Riegel','Süßes & Backen','🍓','Ofen',30,7,190,8,'oatbars',
+ ['200 g Zarte Haferflocken','2 Stk Reife Bananen','150 g Himbeeren','2 EL Kokosöl','1 TL Zimt'],
+ ['Bananen zerdrücken, mit Haferflocken, Kokosöl und Zimt mischen.','Die Hälfte in eine Form drücken, Himbeeren darauf verteilen, Rest darüberstreuen.','20–25 Minuten bei 180 °C backen und in Riegel schneiden.'],
+ 'Perfekt als Snack für unterwegs.');
+R('Zimt-Bananen aus dem Airfryer','Süßes & Backen','🍌','Airfryer',8,2,130,1,'bakedbanana',
+ ['2 Stk Bananen','1 TL Zimt','1 TL Kokosöl'],
+ ['Bananen längs halbieren und mit Kokosöl bestreichen.','Mit Zimt bestäuben.','5 Minuten bei 180 °C garen.'],
+ 'Mit Kokosjoghurt ein schnelles Dessert.');
+
+/* --- Snacks --- */
+R('Hummus mit Gemüsesticks','Snacks','🥕','Kalt',10,12,280,2,'hummus',
+ ['240 g Kichererbsen (Dose)','2 EL Tahini (Sesammus)','1 Stk Zitrone (Saft)','1 EL Olivenöl','2 Stk Karotten (als Sticks)'],
+ ['Kichererbsen abspülen und mit Tahini, Zitronensaft, Öl und 3 EL Wasser fein pürieren.','Mit Salz und Kreuzkümmel abschmecken.','Mit Gemüsesticks servieren.'],
+ 'Tahini-Etikett prüfen: reines Sesammus, ohne Nussspuren.');
+R('Guacamole mit Gemüsesticks','Snacks','🥑','Kalt',8,5,260,2,'guacamole',
+ ['2 Stk Reife Avocados','1 Stk Limette','1 Stk Tomate','0.5 Stk Rote Zwiebel','2 Stk Karotten (als Sticks)'],
+ ['Avocados mit Limettensaft zerdrücken.','Tomate und Zwiebel fein würfeln und unterheben.','Mit Salz und Pfeffer abschmecken.'],
+ 'Der Kern im Dip hält die Farbe frisch.');
+R('Hartgekochte Eier mit Kräutersalz','Snacks','🥚','Topf',12,19,230,1,'boiledeggs',
+ ['3 Stk Bio-Eier','1 Prise Kräutersalz'],
+ ['Eier in kochendes Wasser legen.','10 Minuten kochen.','Abschrecken, schälen und mit Kräutersalz würzen.'],
+ 'Auf Vorrat kochen: 5 Tage im Kühlschrank haltbar.');
+R('Reiswaffeln mit Avocado & Ei','Snacks','🍘','Kalt',6,15,310,1,'ricecakes',
+ ['3 Stk Reiswaffeln','0.5 Stk Reife Avocado','2 Stk Hartgekochte Eier'],
+ ['Avocado zerdrücken und auf die Reiswaffeln streichen.','Eier in Scheiben schneiden und darauf legen.','Mit Salz, Pfeffer und Chili würzen.'],
+ 'Super für zwischendurch im Büro.');
+R('Röstkichererbsen aus dem Airfryer','Snacks','🫘','Airfryer',18,12,220,2,'roastedchickpeas',
+ ['240 g Kichererbsen (Dose, trocken getupft)','1 EL Olivenöl','1 TL Paprikapulver'],
+ ['Kichererbsen gut abtrocknen.','Mit Öl, Paprika und Salz mischen.','12–15 Minuten bei 200 °C knusprig garen, zweimal schütteln.'],
+ 'Möglichst trocken tupfen – dann werden sie knusprig.');
+R('Gewürzte Kürbiskerne','Snacks','🎃','Airfryer',8,8,170,2,'pumpkinseeds',
+ ['60 g Kürbiskerne','1 TL Olivenöl','1 TL Paprikapulver'],
+ ['Kürbiskerne mit Öl, Paprika und Salz mischen.','5 Minuten bei 170 °C im Airfryer rösten, einmal schütteln.','Abkühlen lassen.'],
+ 'Perfekt als Topping für Salate und Suppen.');
+R('Apfelspalten mit Kokos-Dip','Snacks','🍏','Kalt',5,4,190,1,'apple',
+ ['1 Stk Apfel','100 g Kokosjoghurt','1 TL Zimt','1 TL Ahornsirup'],
+ ['Apfel in Spalten schneiden.','Kokosjoghurt mit Zimt und Ahornsirup verrühren.','Spalten in den Dip tunken.'],
+ 'Mit Zitronensaft bleibt der Apfel hell.');
+R('Karotten-Pommes aus dem Airfryer','Snacks','🥕','Airfryer',18,2,120,2,'carrotfries',
+ ['4 Stk Karotten','1 EL Olivenöl','1 TL Paprikapulver'],
+ ['Karotten in Stifte schneiden.','Mit Öl, Paprika und Salz mischen.','12–15 Minuten bei 200 °C garen, zweimal schütteln.'],
+ 'Dünn geschnitten werden sie knuspriger.');
+R('Pfannen-Popcorn mit Kokosöl','Snacks','🍿','Pfanne',8,4,150,2,'popcorn',
+ ['60 g Popcorn-Mais','1 EL Kokosöl','1 Prise Salz'],
+ ['Kokosöl mit 3 Maiskörnern im Topf erhitzen.','Sobald sie platzen, restlichen Mais zugeben und Deckel schließen.','Töpfchen schütteln, bis es nicht mehr knallt, und salzen.'],
+ 'Mit Zimt bestäubt wird es süß.');
+R('Kokos-Mango-Smoothie','Snacks','🥭','Kalt',5,3,240,1,'smoothie',
+ ['150 g Mango (Tiefkühl)','1 Stk Banane','150 ml Kokosdrink'],
+ ['Alle Zutaten in den Mixer geben.','Fein pürieren.','Sofort trinken.'],
+ 'Kokosdrink ohne Zusätze wählen.');
+R('Beeren-Protein-Smoothie','Snacks','🫐','Kalt',5,22,280,1,'berrysmoothie',
+ ['150 g Beeren (Tiefkühl)','150 g Sojajoghurt natur','100 ml Sojamilch','1 EL Chiasamen'],
+ ['Alle Zutaten in den Mixer geben.','Cremig mixen.','Mit etwas Zimt servieren.'],
+ 'Sojaprodukte ohne Sonnenblumenöl wählen.');
+R('Süßkartoffel-Chips aus dem Airfryer','Snacks','🍠','Airfryer',20,2,150,2,'sweetpotatochips',
+ ['1 Stk Süßkartoffel (ca. 250 g)','1 EL Olivenöl','1 Prise Salz'],
+ ['Süßkartoffel in hauchdünne Scheiben hobeln.','Mit Öl und Salz mischen.','10–12 Minuten bei 160 °C garen, zwischendurch schütteln.'],
+ 'Dünn hobeln – sonst bleiben sie weich.');
+R('Edamame mit Meersalz','Snacks','🫛','Topf',6,17,190,1,'edamame',
+ ['150 g Edamame (TK, in Schale)','1 Prise Meersalz'],
+ ['Edamame in kochendem Salzwasser 4 Minuten garen.','Abgießen und mit Meersalz bestreuen.','Aus der Schale drücken und genießen.'],
+ 'Proteinreich und sättigend.');
+
+/* ---------- BAUKASTEN ---------- */
+const BUILDER_DATA={
+ bases:[
+  {id:'b1',name:'Süßkartoffel-Würfel',amount:'200 g',protein:4,kcal:175,prep:'in 1 cm Würfel schneiden und in etwas Olivenöl 10 Min. goldbraun braten'},
+  {id:'b2',name:'Quinoa-Tri-Color',amount:'80 g (trocken)',protein:11,kcal:280,prep:'heiß abspülen und in Salzwasser 15 Min. locker köcheln'},
+  {id:'b3',name:'Rote-Linsen-Pasta',amount:'85 g (trocken)',protein:21,kcal:295,prep:'in reichlich Salzwasser 7 Min. bissfest kochen'},
+  {id:'b4',name:'Knusprige Ofen-Kartoffeln',amount:'220 g',protein:5,kcal:165,prep:'halbieren und in der Pfanne oder im Airfryer 15 Min. knusprig garen'},
+  {id:'b5',name:'Duftender Basmati-Reis',amount:'75 g (trocken)',protein:6,kcal:265,prep:'in der 1,5-fachen Menge Salzwasser 12 Min. dämpfen'}],
+ proteins:[
+  {id:'p1',name:'Knusprige Hühnerbrust',amount:'160 g',protein:37,kcal:175,prep:'in Streifen schneiden, mit Paprika & Kräutern in Rapsöl 6 Min. saftig braten'},
+  {id:'p2',name:'Gebratenes Lachsfilet',amount:'150 g',protein:30,kcal:280,prep:'auf der Hautseite in etwas Rapsöl 4 Min. kross anbraten, dann wenden'},
+  {id:'p3',name:'3 Bio-Eier (Rührei/Spiegelei)',amount:'3 Stück',protein:21,kcal:240,prep:'in etwas Olivenöl als cremiges Kräuter-Rührei oder Spiegelei braten'},
+  {id:'p4',name:'Marinierter Räuchertofu',amount:'150 g',protein:26,kcal:230,prep:'würfeln, in Rapsöl scharf anbraten und mit 1 EL Sojasauce ablöschen'},
+  {id:'p5',name:'Saftige Rinderstreifen',amount:'150 g',protein:33,kcal:195,prep:'bei hoher Hitze in der Pfanne 3–4 Min. rosa anbraten und ruhen lassen'},
+  {id:'p6',name:'Geröstete Kichererbsen & Ei',amount:'120 g + 1 Ei',protein:16,kcal:235,prep:'Kichererbsen mit Paprikapulver in der Pfanne kross rösten, Ei dazu servieren'}],
+ veggies:[
+  {id:'v1',name:'Brokkoli-Röschen',amount:'120 g',protein:4,kcal:42},
+  {id:'v2',name:'Bunte Ofen-Paprika',amount:'120 g',protein:1,kcal:38},
+  {id:'v3',name:'Junger Blattspinat',amount:'100 g',protein:3,kcal:23},
+  {id:'v4',name:'Gebratene Zucchini',amount:'120 g',protein:2,kcal:24},
+  {id:'v5',name:'Süße Kirschtomaten',amount:'100 g',protein:1,kcal:20},
+  {id:'v6',name:'Knackige Edamame',amount:'80 g',protein:9,kcal:100}],
+ sauces:[
+  {id:'s1',name:'Cremiges Kokos-Limetten-Curry',amount:'80 ml Kokosmilch + Limette & Curry',protein:1,kcal:130,prep:'Kokosmilch mit Currypulver und Limettensaft 2 Min. sämig einköcheln'},
+  {id:'s2',name:'Avocado-Kräuter-Creme',amount:'1/2 Avocado + Zitrone & Olivenöl',protein:2,kcal:145,prep:'halbe Avocado mit Zitronensaft, 1 TL Olivenöl, Wasser & Salz zerdrücken'},
+  {id:'s3',name:'Honig-Senf-Olivenöl-Dressing',amount:'1 EL Olivenöl + 1 TL Senf & Honig',protein:1,kcal:115,prep:'Olivenöl, Apfelessig, Senf und einen Hauch Honig glatt verquirlen'},
+  {id:'s4',name:'Tomaten-Basilikum-Salsa',amount:'100 g Passata + Knoblauch & Basilikum',protein:2,kcal:55,prep:'Tomatensauce mit Olivenöl, Knoblauch und frischem Basilikum erwärmen'},
+  {id:'s5',name:'Asiatische Soja-Ingwer-Glaze',amount:'2 EL Sojasauce + Ingwer & Sesamöl',protein:2,kcal:65,prep:'Sojasauce mit frisch geriebenem Ingwer, Limette und 1 TL Sesamöl mischen'}],
+ toppings:[
+  {id:'t1',name:'Geröstete steirische Kürbiskerne',amount:'15 g',protein:5,kcal:85},
+  {id:'t2',name:'Geschrotete Leinsamen & Chia',amount:'15 g',protein:3,kcal:70},
+  {id:'t3',name:'Gerösteter Sesam-Mix',amount:'12 g',protein:3,kcal:68},
+  {id:'t4',name:'Knusprige Röst-Kichererbsen',amount:'25 g',protein:4,kcal:75},
+  {id:'t5',name:'Frischer Gartenkräuter-Bund',amount:'1 Handvoll',protein:1,kcal:10}]
+};
+
+/* ---------- SWAPS ---------- */
+const SWAPS=[
+ {forbidden:'🚫 Kuhmilch & Sahne (Schlagobers)',allowed:'✅ Kokosmilch & Safe-Hafermilch',icon:'🥛',usage:'Saucen, Currys, Pfannkuchen & Müsli',details:'Beim Kochen ersetzt Kokosmilch aus der Dose Sahne 1:1 und macht jedes Gericht samtig. Für Kaffee, Rührei und Backen Hafermilch oder Sojamilch verwenden (beim Kauf auf Rapsöl statt Sonnenblumenöl achten!).'},
+ {forbidden:'🚫 Topfen (Quark), Skyr & Joghurt',allowed:'✅ Kokosjoghurt Natur & Sojajoghurt + Ei',icon:'🥣',usage:'Bowls, Dips & saftige Kuchen',details:'Sojajoghurt liefert viel pflanzliches Protein, Kokosjoghurt ist wunderbar cremig. Beim Backen einfach Kokosjoghurt mit 1–2 extra aufgeschlagenen Bio-Eiern kombinieren!'},
+ {forbidden:'🚫 Butter & Butterschmalz',allowed:'✅ Mildes Rapsöl, Olivenöl & Kokosöl',icon:'🫒',usage:'Braten, Rösten & Backen',details:'100 g Butter im Backrezept ersetzt du durch 80 ml mildes Rapsöl oder geschmolzenes Kokosöl. Zum herzhaften Anbraten sind Olivenöl und Rapsöl ideal.'},
+ {forbidden:'🚫 Gemahlene Mandeln, Walnüsse & Cashews',allowed:'✅ Fein gemahlene Haferflocken & Kürbiskerne',icon:'🌾',usage:'Kuchenböden, Muffins & Crunch',details:'Wenn ein Rezept „gemahlene Mandeln“ verlangt, nimmst du 1:1 fein gemahlene Haferflocken oder Kokosraspeln. Für den knackigen Biss sorgen steirische Kürbiskerne.'},
+ {forbidden:'🚫 Sonnenblumenöl & Sonnenblumenkerne',allowed:'✅ Steirische Kürbiskerne, Leinsamen, Chia & Sesam',icon:'🎃',usage:'Salat-Toppings, Brot & Bratöl',details:'Vorsicht bei fertigen Körnermischungen, Broten und Aufstrichen: Oft sind Sonnenblumenkerne oder -öl versteckt. Sichere Power-Samen sind Kürbiskerne, Leinsamen, Chiasamen und Sesam.'},
+ {forbidden:'🚫 Käse, Parmesan & Feta',allowed:'✅ Kürbiskern-Brösel, Hefeflocken & Avocado',icon:'🥑',usage:'Pasta, Aufläufe & Salate',details:'Für würzigen Schmelz auf Pasta gehackte Kürbiskerne ohne Fett anrösten und mit 1 EL Hefeflocken und Knoblauch mischen. In Salaten ersetzt Avocado mit Zitrone den Feta.'}
+];
+
+/* ---------- STATE ---------- */
+const CATS=['Alle','Frühstück','Büro-Lunch','Abendessen','Süßes & Backen','Snacks'];
+const CAT_CLASS={'Frühstück':'c-Frühstück','Büro-Lunch':'c-Büro-Lunch','Abendessen':'c-Abendessen','Süßes & Backen':'c-Süßes','Snacks':'c-Snacks'};
+const DEVS=[['Alle','Alle Geräte'],['Airfryer','🌀 Airfryer'],['Pfanne','🍳 Pfanne'],['Topf','🍲 Topf'],['Ofen','🔥 Ofen'],['Kalt','🥗 Ohne Kochen']];
+const DEV_LABEL={Airfryer:'🌀 Airfryer',Pfanne:'🍳 Pfanne',Topf:'🍲 Topf',Ofen:'🔥 Ofen',Kalt:'🥗 Ohne Kochen'};
+let fCat='Alle',fDev='Alle',fQuick=false,fFew=false,fFav=false;
+let active=null,portions=2,timerI=null,timerS=0;
+let bs={base:'b1',protein:'p1',veggies:['v1','v5'],sauce:'s1',topping:'t1'};
+
+function lsGet(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+let favs=lsGet('tanja_fav_v1',[]);
+let shop=lsGet('tanja_shopping_v1',[
+ {id:1,text:'10 Bio-Eier (Freiland)',checked:false},
+ {id:2,text:'Steirische Kürbiskerne (nussfrei)',checked:false},
+ {id:3,text:'Hafermilch (ohne Sonnenblumenöl)',checked:false},
+ {id:4,text:'Kokosjoghurt Natur',checked:false},
+ {id:5,text:'Frisches Lachsfilet & Hühnerbrust',checked:false}]);
+
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',2400)}
+function imgUrl(r){return 'https://loremflickr.com/640/400/'+encodeURIComponent(r.kw)+'?lock='+r.id.slice(1)}
+function phHTML(r){return '<span class="emo">'+r.emoji+'</span><img src="'+imgUrl(r)+'" loading="lazy" alt="'+esc(r.title)+'" onerror="this.remove()">'}
+
+/* ---------- NAV ---------- */
+function tab(n){
+  ['recipes','builder','swaps','shopping'].forEach(t=>{
+    document.getElementById('tab-'+t).classList.toggle('active',t===n);
+    document.getElementById('n-'+t).classList.toggle('on',t===n);
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ---------- REZEPT-LISTE ---------- */
+function renderChips(){
+  document.getElementById('catChips').innerHTML=CATS.map(c=>'<button class="chip'+(fCat===c?' on':'')+'" onclick="setCat(\''+c.replace(/'/g,"\\'")+'\')">'+(c==='Alle'?'Alle ('+RECIPES.length+')':c)+'</button>').join('');
+  document.getElementById('devChips').innerHTML=DEVS.map(d=>'<button class="chip'+(fDev===d[0]?' on':'')+'" onclick="setDev(\''+d[0]+'\')">'+d[1]+'</button>').join('');
+  document.getElementById('togChips').innerHTML=
+   '<button class="chip tog'+(fQuick?' on':'')+'" onclick="fQuick=!fQuick;renderRecipes()">⚡ Unter 15 Min</button>'+
+   '<button class="chip tog'+(fFew?' on':'')+'" onclick="fFew=!fFew;renderRecipes()">🛒 Max. 5 Zutaten</button>'+
+   '<button class="chip tog'+(fFav?' on':'')+'" onclick="fFav=!fFav;renderRecipes()">❤️ Favoriten</button>';
+}
+function setCat(c){fCat=c;renderRecipes()}
+function setDev(d){fDev=d;renderRecipes()}
+function filtered(){
+  const q=document.getElementById('q').value.trim().toLowerCase();
+  return RECIPES.filter(r=>{
+    if(fCat!=='Alle'&&r.cat!==fCat)return false;
+    if(fDev!=='Alle'&&!r.dev.includes(fDev))return false;
+    if(fQuick&&r.time>15)return false;
+    if(fFew&&r.ingredients.length>5)return false;
+    if(fFav&&!favs.includes(r.id))return false;
+    if(q){
+      const hay=(r.title+' '+r.desc+' '+r.ingredients.join(' ')+' '+r.dev.join(' ')).toLowerCase();
+      if(!hay.includes(q))return false;
+    }
+    return true;
+  });
+}
+function renderRecipes(){
+  renderChips();
+  const list=filtered();
+  document.getElementById('count').textContent=list.length+' Rezepte';
+  const g=document.getElementById('grid');
+  if(!list.length){g.innerHTML='<div class="empty"><div style="font-size:3rem">🔍</div><h3>Kein Rezept gefunden</h3><p>Probiere einen anderen Filter oder Suchbegriff.</p></div>';return}
+  g.innerHTML=list.map(r=>
+   '<article class="card" onclick="openRecipe(\''+r.id+'\')">'+
+    '<div class="ph '+CAT_CLASS[r.cat]+'">'+phHTML(r)+
+     '<span class="time">⏱ '+r.time+' Min</span>'+
+     '<button class="fav'+(favs.includes(r.id)?' on':'')+'" onclick="toggleFav(event,\''+r.id+'\')">'+(favs.includes(r.id)?'♥':'♡')+'</button>'+
+    '</div>'+
+    '<div class="cb"><div class="meta">'+r.dev.map(d=>DEV_LABEL[d]).join(' · ')+'</div>'+
+     '<h3>'+esc(r.title)+'</h3>'+
+     '<div class="stats"><b>'+r.protein+' g Protein</b><span>'+r.kcal+' kcal</span><span>'+r.ingredients.length+' Zutaten</span></div>'+
+    '</div></article>').join('');
+}
+function randomRecipe(){
+  const l=filtered();
+  if(!l.length){toast('Kein Rezept mit diesen Filtern');return}
+  openRecipe(l[Math.floor(Math.random()*l.length)].id);
+}
+function toggleFav(e,id){
+  e.stopPropagation();
+  favs=favs.includes(id)?favs.filter(x=>x!==id):favs.concat(id);
+  lsSet('tanja_fav_v1',favs);
+  if(document.getElementById('modal').classList.contains('show')&&active&&active.id===id)updateModalFav();
+  renderRecipes();
+}
+
+/* ---------- REZEPT-DETAIL ---------- */
+function fmtNum(n){return String(Math.round(n*10)/10).replace('.',',')}
+function scaleIng(s,ratio){
+  const m=s.match(/^(\d+\/\d+|\d+(?:[.,]\d+)?)\s+(.*)$/);
+  if(!m)return s;
+  let v;
+  if(m[1].includes('/')){const p=m[1].split('/');v=p[0]/p[1]}else v=parseFloat(m[1].replace(',','.'));
+  return fmtNum(v*ratio)+' '+m[2];
+}
+function updateModalFav(){
+  const b=document.getElementById('mFav');
+  if(!b)return;
+  const on=favs.includes(active.id);
+  b.className='fav'+(on?' on':'');
+  b.textContent=on?'♥':'♡';
+}
+function openRecipe(id){
+  active=RECIPES.find(r=>r.id===id);
+  if(!active)return;
+  portions=active.basePortions;
+  const r=active;
+  const ph=document.getElementById('mPh');
+  ph.className='ph '+CAT_CLASS[r.cat];
+  ph.innerHTML=phHTML(r)+'<button class="fav" id="mFav" onclick="toggleFav(event,\''+r.id+'\')">♡</button>';
+  updateModalFav();
+  document.getElementById('mDevs').innerHTML='<span>'+esc(r.cat)+'</span>'+r.dev.map(d=>'<span>'+DEV_LABEL[d]+'</span>').join('');
+  document.getElementById('mTitle').textContent=r.title;
+  document.getElementById('mDesc').textContent=r.desc;
+  document.getElementById('mProt').textContent=r.protein+' g';
+  document.getElementById('mKcal').textContent=r.kcal+' kcal';
+  document.getElementById('mTime').textContent=r.time+' Min';
+  document.getElementById('mTip').textContent=r.tip;
+  document.getElementById('mDesc').style.display=r.desc?'block':'none';
+  renderPortions();
+  document.getElementById('mSteps').innerHTML=r.steps.map((s,i)=>
+   '<label class="stp"><input type="checkbox" onchange="this.parentElement.classList.toggle(\'done\',this.checked)"><div><b>Schritt '+(i+1)+':</b> '+esc(s)+'</div></label>').join('');
+  const m=document.getElementById('modal');
+  m.classList.add('show');m.scrollTop=0;
+  document.body.style.overflow='hidden';
+}
+function closeRecipe(){
+  document.getElementById('modal').classList.remove('show');
+  document.body.style.overflow='';
+  stopTimer();
+}
+function chgPortions(d){
+  const n=portions+d;
+  if(n>=1&&n<=12){portions=n;renderPortions()}
+}
+function renderPortions(){
+  document.getElementById('mPort').textContent=portions;
+  const ratio=portions/active.basePortions;
+  document.getElementById('mIng').innerHTML=active.ingredients.map(i=>'<div class="ing"><span>'+esc(scaleIng(i,ratio))+'</span></div>').join('');
+}
+function modalToShopping(){
+  const ratio=portions/active.basePortions;
+  active.ingredients.slice().reverse().forEach(i=>shop.unshift({id:Date.now()+Math.random(),text:scaleIng(i,ratio),checked:false}));
+  saveShop();
+  toast(active.ingredients.length+' Zutaten auf der Einkaufsliste');
+}
+
+/* Timer */
+function startTimer(min){stopTimer();timerS=min*60;tick();timerI=setInterval(()=>{timerS--;tick();if(timerS<=0){stopTimer();toast('⏰ Timer abgelaufen!');try{navigator.vibrate&&navigator.vibrate([300,150,300])}catch(e){}}},1000)}
+function stopTimer(){if(timerI)clearInterval(timerI);timerI=null;timerS=0;tick()}
+function tick(){document.getElementById('tdisp').textContent=String(Math.floor(timerS/60)).padStart(2,'0')+':'+String(timerS%60).padStart(2,'0')}
+
+/* ---------- BAUKASTEN ---------- */
+function bFind(list,id){return BUILDER_DATA[list].find(x=>x.id===id)}
+function renderBuilder(){
+  const D=BUILDER_DATA;
+  document.getElementById('b-base').innerHTML=D.bases.map(i=>'<button class="opt'+(bs.base===i.id?' on':'')+'" onclick="bPick(\'base\',\''+i.id+'\')"><b>'+i.name+'</b><span>'+i.protein+' g Prot · '+i.kcal+' kcal</span></button>').join('');
+  document.getElementById('b-protein').innerHTML=D.proteins.map(i=>'<button class="opt'+(bs.protein===i.id?' on':'')+'" onclick="bPick(\'protein\',\''+i.id+'\')"><b>'+i.name+'</b><span>+'+i.protein+' g Protein</span></button>').join('');
+  document.getElementById('b-veg').innerHTML=D.veggies.map(i=>'<button class="opt'+(bs.veggies.includes(i.id)?' on':'')+'" onclick="bVeg(\''+i.id+'\')"><b>'+i.name+'</b><span>'+i.amount+'</span></button>').join('');
+  document.getElementById('b-sauce').innerHTML=D.sauces.map(i=>'<button class="opt'+(bs.sauce===i.id?' on':'')+'" onclick="bPick(\'sauce\',\''+i.id+'\')"><b>'+i.name+'</b><span>'+i.amount+'</span></button>').join('');
+  document.getElementById('b-top').innerHTML=D.toppings.map(i=>'<button class="opt'+(bs.topping===i.id?' on':'')+'" onclick="bPick(\'topping\',\''+i.id+'\')"><b>'+i.name+'</b><span>+'+i.protein+' g Prot</span></button>').join('');
+}
+function bPick(t,id){bs[t]=id;renderBuilder();updateBuilder()}
+function bVeg(id){
+  const i=bs.veggies.indexOf(id);
+  if(i>-1){if(bs.veggies.length>1)bs.veggies.splice(i,1)}
+  else{if(bs.veggies.length>=2)bs.veggies.shift();bs.veggies.push(id)}
+  renderBuilder();updateBuilder();
+}
+function randomizeBuilder(){
+  const D=BUILDER_DATA,pick=a=>a[Math.floor(Math.random()*a.length)].id;
+  bs.base=pick(D.bases);bs.protein=pick(D.proteins);bs.sauce=pick(D.sauces);bs.topping=pick(D.toppings);
+  const a=pick(D.veggies);let b=pick(D.veggies);
+  if(a===b)b=D.veggies.find(v=>v.id!==a).id;
+  bs.veggies=[a,b];
+  renderBuilder();updateBuilder();toast('🎲 Neue Kombination gewürfelt!');
+}
+function bParts(){
+  return {base:bFind('bases',bs.base),prot:bFind('proteins',bs.protein),vegs:bs.veggies.map(id=>bFind('veggies',id)),sauce:bFind('sauces',bs.sauce),top:bFind('toppings',bs.topping)};
+}
+function updateBuilder(){
+  const p=bParts();
+  const tp=p.base.protein+p.prot.protein+p.vegs.reduce((s,v)=>s+v.protein,0)+p.sauce.protein+p.top.protein;
+  const tk=p.base.kcal+p.prot.kcal+p.vegs.reduce((s,v)=>s+v.kcal,0)+p.sauce.kcal+p.top.kcal;
+  document.getElementById('bTitle').textContent=p.prot.name+' auf '+p.base.name;
+  document.getElementById('bProt').textContent=tp+' g';
+  document.getElementById('bKcal').textContent=tk+' kcal';
+  const ing=[p.base.amount+' '+p.base.name,p.prot.amount+' '+p.prot.name].concat(p.vegs.map(v=>v.amount+' '+v.name),[p.sauce.name+' ('+p.sauce.amount+')',p.top.amount+' '+p.top.name]);
+  document.getElementById('bIng').innerHTML=ing.map(i=>'<li>'+i+'</li>').join('');
+  const steps=['Basis: '+p.base.name+' '+p.base.prep+'.',p.prot.name+': '+p.prot.prep+'. Parallel '+p.vegs.map(v=>v.name).join(' & ')+' bissfest mitgaren.','Sauce: '+p.sauce.prep+'.','Anrichten und mit '+p.top.name+' bestreuen.'];
+  document.getElementById('bSteps').innerHTML=steps.map(s=>'<li>'+s+'</li>').join('');
+}
+function addBuilderToShopping(){
+  const p=bParts();
+  [p.base.amount+' '+p.base.name,p.prot.amount+' '+p.prot.name].concat(p.vegs.map(v=>v.amount+' '+v.name),[p.sauce.name,p.top.amount+' '+p.top.name])
+   .forEach(t=>shop.unshift({id:Date.now()+Math.random(),text:t,checked:false}));
+  saveShop();toast('Baukasten-Gericht auf der Einkaufsliste');
+}
+
+/* ---------- SWAPS ---------- */
+function renderSwaps(){
+  document.getElementById('swaps').innerHTML=SWAPS.map(s=>
+   '<div class="swap"><div style="display:flex;justify-content:space-between;align-items:flex-start"><span class="u">'+s.usage+'</span><span style="font-size:1.8rem">'+s.icon+'</span></div>'+
+   '<div class="no">'+s.forbidden+'</div><div class="yes">'+s.allowed+'</div><p>'+s.details+'</p></div>').join('');
+}
+
+/* ---------- EINKAUF ---------- */
+function saveShop(){lsSet('tanja_shopping_v1',shop);renderShop()}
+function renderShop(){
+  document.getElementById('badge').textContent=shop.filter(i=>!i.checked).length;
+  const c=document.getElementById('shopList');
+  if(!shop.length){c.innerHTML='<div style="text-align:center;color:var(--muted);padding:24px">Die Liste ist leer. Füge Zutaten hinzu oder übernimm sie aus einem Rezept.</div>';return}
+  c.innerHTML=shop.map((i,idx)=>
+   '<div class="si'+(i.checked?' done':'')+'"><input type="checkbox" '+(i.checked?'checked':'')+' onchange="toggleShop('+idx+')"><span>'+esc(i.text)+'</span><button onclick="removeShop('+idx+')">✕</button></div>').join('');
+}
+function addCustom(e){
+  e.preventDefault();
+  const el=document.getElementById('newItem'),v=el.value.trim();
+  if(!v)return;
+  shop.unshift({id:Date.now(),text:v,checked:false});el.value='';saveShop();toast('Hinzugefügt');
+}
+function quickAdd(t){shop.unshift({id:Date.now()+Math.random(),text:t,checked:false});saveShop();toast('+ '+t)}
+function toggleShop(i){shop[i].checked=!shop[i].checked;saveShop()}
+function removeShop(i){shop.splice(i,1);saveShop()}
+function clearDone(){shop=shop.filter(i=>!i.checked);saveShop();toast('Erledigte entfernt')}
+function copyList(){
+  const txt='🛒 *Tanjas Safe-Einkaufsliste*\n(milchfrei, nussfrei, ohne Sonnenblumenkerne)\n\n'+(shop.filter(i=>!i.checked).map(i=>'• '+i.text).join('\n')||'Alles erledigt!');
+  const fallback=()=>{const t=document.createElement('textarea');t.value=txt;document.body.appendChild(t);t.select();try{document.execCommand('copy')}catch(e){}document.body.removeChild(t);toast('Liste kopiert!')};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(()=>toast('Liste kopiert!'),fallback)}else fallback();
+}
+
+/* ---------- START ---------- */
+renderRecipes();renderBuilder();updateBuilder();renderSwaps();renderShop();
+</script>
+</body>
+</html>
